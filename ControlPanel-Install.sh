@@ -61,8 +61,10 @@ echo "-------------------------------------"
 echo "Configuring User Groups"
 echo "-------------------------------------"
 usermod -a -G dialout c1tech
-usermod -a -G video c1tech
 usermod -a -G audio c1tech
+usermod -a -G video c1tech
+usermod -a -G input c1tech
+echo "c1tech Added to dialout, audio, video, input groups"
 echo "-------------------------------------"
 echo "Installing PJSIP"
 echo "-------------------------------------"
@@ -98,13 +100,14 @@ echo "-------------------------------------"
 echo "Creating Service for Contold Panel Application"
 echo "-------------------------------------"
 journalctl --vacuum-time=60d
+# /usr/lib/systemd/user/orcp.service
 cat > /etc/systemd/system/orcp.service << "EOF"
 [Unit]
 Description=C1Tech Operating Room Control Panel V2.0
 
 [Service]
-Environment="QT_QPA_EGLFS_HIDECURSOR=0"
-ExecStart=/bin/bash -c '/home/c1tech/C1-Control-Panel/Panel/panel -platform eglfs'
+Environment="XDG_RUNTIME_DIR=/run/user/1000"
+ExecStart=/home/c1tech/C1-Control-Panel/Panel/panel -platform eglfs
 Restart=always
 User=c1tech
 [Install]
