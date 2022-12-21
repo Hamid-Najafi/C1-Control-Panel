@@ -1,7 +1,6 @@
 #!/bin/bash -e
 
 # Copyleft (c) 2022.
-#
 # -------==========-------
 # Ubuntu Server 22.04.01
 # Hostname: orcp6-5
@@ -40,15 +39,26 @@ apt install -y qml-module-qtquick* qml-module-qt-labs-settings qml-module-qtgrap
 # apt-get install qt515-meta-full -y
 # export LD_LIBRARY_PATH=/opt/qt515/lib/
 echo "-------------------------------------"
-echo "Configuring Music & Voice Command"
+echo "Configuring Music"
 echo "-------------------------------------"
 apt install -y alsa alsa-tools alsa-utils
 apt install -y portaudio19-dev libportaudio2 libportaudiocpp0
 apt install -y libasound2-dev libpulse-dev gstreamer1.0-omx-* gstreamer1.0-alsa gstreamer1.0-plugins-good libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev 
+echo "-------------------------------------"
+echo "Configuring Vosk"
+echo "-------------------------------------"
 /bin/su -s /bin/bash -c 'pip3 install sounddevice vosk' c1tech
+echo -e "options snd-hda-intel id=PCH,HDMI index=1,0" | tee -a /etc/modprobe.d/alsa-base.conf
+cat >> ./DownloadVoskModel.py << EOF
+from vosk import Model
+model = Model(lang="fa")
+exit()
+EOF
+python3 ./DownloadVoskModel.py
+rm ./DownloadVoskModel.py 
 #alsamixer
 echo "-------------------------------------"
-echo "Configuring User and Groups"
+echo "Configuring User Groups"
 echo "-------------------------------------"
 usermod -a -G dialout c1tech
 usermod -a -G video c1tech
@@ -67,7 +77,7 @@ ldconfig
 # Verify that pjproject has been installed in the target location
 ldconfig -p | grep pj
 echo "-------------------------------------"
-echo "USB Auto Mount"
+echo "Installing USB Auto Mount"
 echo "-------------------------------------"
 apt install -y liblockfile-bin liblockfile1 lockfile-progs
 git clone https://github.com/rbrito/usbmount
@@ -76,7 +86,7 @@ dpkg-buildpackage -us -uc -b
 cd ..
 dpkg -i usbmount_0.0.24_all.deb
 echo "-------------------------------------"
-echo "Setup Contold Panel Application"
+echo "Installing Contold Panel Application"
 echo "-------------------------------------"
 git clone https://github.com/Hamid-Najafi/C1-Control-Panel.git /home/c1tech/C1-Control-Panel
 mv /home/c1tech/C1-Control-Panel/C1 .
@@ -85,7 +95,7 @@ touch -r *.*
 qmake
 make -j4 
 echo "-------------------------------------"
-echo "Create Service for Contold Panel Application"
+echo "Creating Service for Contold Panel Application"
 echo "-------------------------------------"
 journalctl --vacuum-time=60d
 cat > /etc/systemd/system/orcp.service << "EOF"
@@ -129,3 +139,15 @@ echo "-------------------------------------"
 echo "Done, Performing System Reboot"
 echo "-------------------------------------"
 init 6
+
+echo "-------------------------------------"
+echo "Test Mic and Spk"
+echo "-------------------------------------"
+sudo apt-get --purge --reinstall install pulseaudio
+# -------==========-------
+wget https://raw.githubusercontent.com/alphacep/vosk-api/master/python/example/test_microphone.py
+python3 test_microphone.py -m fa
+# -------==========-------
+apt install lame sox
+arecord -v -f cd -t raw | lame -r - output.mp3
+play output.mp3
