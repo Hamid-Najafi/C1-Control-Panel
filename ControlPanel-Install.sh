@@ -89,7 +89,7 @@ echo "-------------------------------------"
 echo "Installing Contold Panel Application"
 echo "-------------------------------------"
 git clone https://github.com/Hamid-Najafi/C1-Control-Panel.git /home/c1tech/C1-Control-Panel
-mv /home/c1tech/C1-Control-Panel/C1 .
+mv /home/c1tech/C1-Control-Panel/C1 /home/c1tech/
 cd /home/c1tech/C1-Control-Panel/Panel
 touch -r *.*
 qmake
@@ -139,7 +139,6 @@ echo "-------------------------------------"
 echo "Done, Performing System Reboot"
 echo "-------------------------------------"
 init 6
-
 echo "-------------------------------------"
 echo "Test Mic and Spk"
 echo "-------------------------------------"
