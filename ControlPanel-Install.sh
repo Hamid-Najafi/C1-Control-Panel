@@ -8,17 +8,13 @@
 # Password: 1478963
 # -------==========-------
 # To Run This Script
-# wget -qO- https://raw.githubusercontent.com/Hamid-Najafi/C1-Control-Panel/main/ControlPanel-Install.sh 
+# wget https://raw.githubusercontent.com/Hamid-Najafi/C1-Control-Panel/main/ControlPanel-Install.sh 
 # chmod +x ControlPanel-Install.sh 
-# sudo ./ControlPanel-Install.sh ORCP6-5
-# -------==========-------
-# Config Openssh on System
-# apt install openssh-server
-# systemctl enable ssh --now
+# sudo ./ControlPanel-Install.sh
 echo "-------------------------------------"
 echo "Setting Hostname"
 echo "-------------------------------------"
-echo "Enter Hostname: "
+echo "Set New Hostname: (ORCP-Floor-Room)"
 read hostname
 hostnamectl set-hostname $hostname
 echo "-------------------------------------"
