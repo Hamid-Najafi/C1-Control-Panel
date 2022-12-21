@@ -51,7 +51,7 @@ echo "-------------------------------------"
 echo -e "options snd-hda-intel id=PCH,HDMI index=1,0" | tee -a /etc/modprobe.d/alsa-base.conf
 cat >> ./DownloadVoskModel.py << EOF
 from vosk import Model
-model = Model(lang="fa")
+model = Model(model_name="vosk-model-small-fa-0.5")
 exit()
 EOF
 python3 ./DownloadVoskModel.py
@@ -103,6 +103,7 @@ cat > /etc/systemd/system/orcp.service << "EOF"
 Description=C1Tech Operating Room Control Panel V2.0
 
 [Service]
+Environment="QT_QPA_EGLFS_HIDECURSOR=0"
 ExecStart=/bin/bash -c '/home/c1tech/C1-Control-Panel/Panel/panel -platform eglfs'
 Restart=always
 User=c1tech
