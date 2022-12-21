@@ -45,7 +45,7 @@ echo "-------------------------------------"
 apt install -y alsa alsa-tools alsa-utils
 apt install -y portaudio19-dev libportaudio2 libportaudiocpp0
 apt install -y libasound2-dev libpulse-dev gstreamer1.0-omx-* gstreamer1.0-alsa gstreamer1.0-plugins-good libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev 
-pip3 install sounddevice vosk
+/bin/su -s /bin/bash -c 'pip3 install sounddevice vosk' c1tech
 #alsamixer
 echo "-------------------------------------"
 echo "Configuring User and Groups"
