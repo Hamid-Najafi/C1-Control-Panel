@@ -143,11 +143,11 @@ init 6
 echo "-------------------------------------"
 echo "Test Mic and Spk"
 echo "-------------------------------------"
-sudo apt-get --purge --reinstall install pulseaudio
+apt install lame sox
+arecord -v -f cd -t raw | lame -r - output.mp3
+play output.mp3
 # -------==========-------
 wget https://raw.githubusercontent.com/alphacep/vosk-api/master/python/example/test_microphone.py
 python3 test_microphone.py -m fa
 # -------==========-------
-apt install lame sox
-arecord -v -f cd -t raw | lame -r - output.mp3
-play output.mp3
+sudo apt-get --purge --reinstall install pulseaudio
