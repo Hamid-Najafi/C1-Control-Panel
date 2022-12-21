@@ -12,8 +12,8 @@
 # wget -qO- https://raw.githubusercontent.com/Hamid-Najafi/C1-Control-Panel/main/ControlPanel-Install.sh | sudo bash -s --
 # -------==========-------
 # Config Openssh on System
-apt install openssh-server
-systemctl enable ssh --now
+# apt install openssh-server
+# systemctl enable ssh --now
 # -------==========-------
 # Pre-Requirements
 sudo su
