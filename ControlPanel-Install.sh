@@ -15,9 +15,12 @@
 # apt install openssh-server
 # systemctl enable ssh --now
 echo "-------------------------------------"
+echo "Setting Hostname"
+echo "-------------------------------------"
+hostnamectl set-hostname $0
+echo "-------------------------------------"
 echo "Installing Pre-Requirements"
 echo "-------------------------------------"
-sudo su
 apt update && apt upgrade -y
 apt install -y software-properties-common git avahi-daemon python3-pip 
 apt install -y debhelper build-essential gcc g++ gdb cmake 
