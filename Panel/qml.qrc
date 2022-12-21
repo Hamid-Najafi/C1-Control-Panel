@@ -1,0 +1,28 @@
+<RCC>
+    <qresource prefix="/">
+        <file>Dashboard.qml</file>
+        <file>main.qml</file>
+        <file>Backend.js</file>
+        <file>Colors.qml</file>
+        <file>MainMenu.qml</file>
+        <file>RNMenuItem.qml</file>
+        <file>Icons.qml</file>
+        <file>LightingPage.qml</file>
+        <file>ToggleLightWidget.qml</file>
+        <file>OccupationLightWidget.qml</file>
+        <file>SliderLightWidget.qml</file>
+        <file>MusicPage.qml</file>
+        <file>HSlider.qml</file>
+        <file>IntercomPage.qml</file>
+        <file>ContactButton.qml</file>
+        <file>TimersPage.qml</file>
+        <file>TimerWidget.qml</file>
+        <file>AboutPage.qml</file>
+        <file>LogPage.qml</file>
+        <file>AlarmWidget.qml</file>
+        <file>AlarmPage.qml</file>
+        <file>WeatherCondition.qml</file>
+        <file>SettingsPage.qml</file>
+        <file>RnTabMenutItem.qml</file>
+    </qresource>
+</RCC>
