@@ -18,7 +18,9 @@
 echo "-------------------------------------"
 echo "Setting Hostname"
 echo "-------------------------------------"
-hostnamectl set-hostname $0
+echo "Enter Hostname: "
+read hostname
+hostnamectl set-hostname $hostname
 echo "-------------------------------------"
 echo "Installing Pre-Requirements"
 echo "-------------------------------------"
