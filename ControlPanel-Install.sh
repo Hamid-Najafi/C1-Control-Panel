@@ -1,3 +1,7 @@
+#!/bin/bash -e
+
+# Copyleft (c) 2022.
+#
 # -------==========-------
 # Ubuntu Server 22.04.01
 # Hostname: orcp6-5
@@ -5,7 +9,7 @@
 # Password: 1478963
 # -------==========-------
 # Run This Script
-wget -qO- https://ubuntu.bigbluebutton.org/bbb-install-2.5.sh | bash -s --
+# wget -qO- https://raw.githubusercontent.com/Hamid-Najafi/C1-Control-Panel/main/ControlPanel-Install.sh | sudo bash -s --
 # -------==========-------
 # Config Openssh on System
 apt install openssh-server
