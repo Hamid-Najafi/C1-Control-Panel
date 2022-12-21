@@ -9,7 +9,9 @@
 # Password: 1478963
 # -------==========-------
 # To Run This Script
-# wget -qO- https://raw.githubusercontent.com/Hamid-Najafi/C1-Control-Panel/main/ControlPanel-Install.sh | sudo bash -s --
+# wget -qO- https://raw.githubusercontent.com/Hamid-Najafi/C1-Control-Panel/main/ControlPanel-Install.sh 
+# chmod +x ControlPanel-Install.sh 
+# sudo ./ControlPanel-Install.sh ORCP6-5
 # -------==========-------
 # Config Openssh on System
 # apt install openssh-server
@@ -21,6 +23,7 @@ hostnamectl set-hostname $0
 echo "-------------------------------------"
 echo "Installing Pre-Requirements"
 echo "-------------------------------------"
+export DEBIAN_FRONTEND=noninteractive
 apt update && apt upgrade -y
 apt install -y software-properties-common git avahi-daemon python3-pip 
 apt install -y debhelper build-essential gcc g++ gdb cmake 
