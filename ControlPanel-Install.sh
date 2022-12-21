@@ -64,9 +64,9 @@ cd ..
 dpkg -i usbmount_0.0.24_all.deb
 # -------==========-------
 # Setup Application
-git clone https://github.com/Hamid-Najafi/C1-Control-Panel.git
-mv C1-Control-Panel/C1 .
-cd C1-Control-Panel/Panel
+git clone https://github.com/Hamid-Najafi/C1-Control-Panel.git /home/c1tech/C1-Control-Panel
+mv /home/c1tech/C1-Control-Panel/C1 .
+cd /home/c1tech/C1-Control-Panel/Panel
 touch -r *.*
 qmake
 make -j4 
@@ -91,8 +91,7 @@ systemctl restart orcp
 # journalctl -u orcp -f
 # -------==========-------
 # Splash Screen
-nano  /etc/default/grub
-GRUB_CMDLINE_LINUX_DEFAULT="quiet splash"
+sed -i 's/GRUB_CMDLINE_LINUX_DEFAULT=""/GRUB_CMDLINE_LINUX_DEFAULT="quiet splash"/g' /etc/default/grub
 update-grub
 
 apt -y autoremove --purge plymouth
@@ -103,9 +102,9 @@ apt -y install plymouth plymouth-themes
 cp /usr/share/plymouth/themes/spinner/bgrt-fallback.png{,.bak}
 cp /usr/share/plymouth/themes/spinner/watermark.png{,.bak}
 cp /usr/share/plymouth/ubuntu-logo.png{,.bak}
-cp C1-Control-Panel/bgrt-c1.png /usr/share/plymouth/themes/spinner/bgrt-fallback.png
-cp C1-Control-Panel/watermark-empty.png /usr/share/plymouth/themes/spinner/watermark.png
-cp C1-Control-Panel/watermark-empty.png /usr/share/plymouth/ubuntu-logo.png
+cp /home/c1tech/C1-Control-Panel/bgrt-c1.png /usr/share/plymouth/themes/spinner/bgrt-fallback.png
+cp /home/c1tech/C1-Control-Panel/watermark-empty.png /usr/share/plymouth/themes/spinner/watermark.png
+cp /home/c1tech/C1-Control-Panel/watermark-empty.png /usr/share/plymouth/ubuntu-logo.png
 update-initramfs -u
 # update-alternatives --list default.plymouth
 # update-alternatives --display default.plymouth
