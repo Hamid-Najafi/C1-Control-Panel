@@ -8,19 +8,22 @@
 # Username: c1tech
 # Password: 1478963
 # -------==========-------
-# Run This Script
+# To Run This Script
 # wget -qO- https://raw.githubusercontent.com/Hamid-Najafi/C1-Control-Panel/main/ControlPanel-Install.sh | sudo bash -s --
 # -------==========-------
 # Config Openssh on System
 # apt install openssh-server
 # systemctl enable ssh --now
-# -------==========-------
-# Pre-Requirements
+echo "-------------------------------------"
+echo "Installing Pre-Requirements"
+echo "-------------------------------------"
 sudo su
 apt update && apt upgrade -y
 apt install -y software-properties-common git avahi-daemon python3-pip 
 apt install -y debhelper build-essential gcc g++ gdb cmake 
-# -------==========-------
+echo "-------------------------------------"
+echo "Installing Qt & Tools"
+echo "-------------------------------------"
 apt install -y mesa-common-dev libfontconfig1 libxcb-xinerama0 libglu1-mesa-dev
 apt install -y qtbase5-dev qt5-qmake libqt5quickcontrols2-5 libqt5virtualkeyboard5*  libqt5webengine5 qtmultimedia5* libqt5serial*  libqt5multimedia*   qtwebengine5-dev libqt5svg5-dev libqt5qml5 libqt5quick5  qttools5*
 apt install -y qml-module-qtquick* qml-module-qt-labs-settings qml-module-qtgraphicaleffects
@@ -30,19 +33,23 @@ apt install -y qml-module-qtquick* qml-module-qt-labs-settings qml-module-qtgrap
 # apt-get install qt515-meta-minimal -y
 # apt-get install qt515-meta-full -y
 # export LD_LIBRARY_PATH=/opt/qt515/lib/
-# -------==========-------
-# Music & Voice Command
-apt install -y portaudio19-dev libportaudio2 libportaudiocpp0
-apt install libasound2-dev libpulse-dev gstreamer1.0-omx-* gstreamer1.0-alsa gstreamer1.0-plugins-good libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev 
-pip3 install sounddevice vosk
+echo "-------------------------------------"
+echo "Configuring Music & Voice Command"
+echo "-------------------------------------"
 apt install -y alsa alsa-tools alsa-utils
+apt install -y portaudio19-dev libportaudio2 libportaudiocpp0
+apt install -y libasound2-dev libpulse-dev gstreamer1.0-omx-* gstreamer1.0-alsa gstreamer1.0-plugins-good libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev 
+pip3 install sounddevice vosk
 #alsamixer
-# -------==========-------
+echo "-------------------------------------"
+echo "Configuring User and Groups"
+echo "-------------------------------------"
 usermod -a -G dialout c1tech
 usermod -a -G video c1tech
 usermod -a -G audio c1tech
-# -------==========-------
-# PJSIP
+echo "-------------------------------------"
+echo "Installing PJSIP"
+echo "-------------------------------------"
 git clone https://github.com/pjsip/pjproject.git
 cd pjproject
 ./configure --prefix=/usr --enable-shared
@@ -53,25 +60,27 @@ make install
 ldconfig
 # Verify that pjproject has been installed in the target location
 ldconfig -p | grep pj
-# -------==========-------
-# USB Auto Mount
-apt install liblockfile-bin liblockfile1 lockfile-progs
+echo "-------------------------------------"
+echo "USB Auto Mount"
+echo "-------------------------------------"
+apt install -y liblockfile-bin liblockfile1 lockfile-progs
 git clone https://github.com/rbrito/usbmount
-apt install  build-essential
 cd usbmount
 dpkg-buildpackage -us -uc -b
 cd ..
 dpkg -i usbmount_0.0.24_all.deb
-# -------==========-------
-# Setup Application
+echo "-------------------------------------"
+echo "Setup Contold Panel Application"
+echo "-------------------------------------"
 git clone https://github.com/Hamid-Najafi/C1-Control-Panel.git /home/c1tech/C1-Control-Panel
 mv /home/c1tech/C1-Control-Panel/C1 .
 cd /home/c1tech/C1-Control-Panel/Panel
 touch -r *.*
 qmake
 make -j4 
-# -------==========-------
-# Create Service for App
+echo "-------------------------------------"
+echo "Create Service for Contold Panel Application"
+echo "-------------------------------------"
 journalctl --vacuum-time=60d
 cat > /etc/systemd/system/orcp.service << "EOF"
 [Unit]
@@ -89,8 +98,9 @@ systemctl daemon-reload
 systemctl enable orcp --now
 systemctl restart orcp
 # journalctl -u orcp -f
-# -------==========-------
-# Splash Screen
+echo "-------------------------------------"
+echo "Configuring Splash Screen"
+echo "-------------------------------------"
 sed -i 's/GRUB_CMDLINE_LINUX_DEFAULT=""/GRUB_CMDLINE_LINUX_DEFAULT="quiet splash"/g' /etc/default/grub
 update-grub
 
@@ -109,5 +119,7 @@ update-initramfs -u
 # update-alternatives --list default.plymouth
 # update-alternatives --display default.plymouth
 # update-alternatives --config default.plymouth
-# -------==========-------
+echo "-------------------------------------"
+echo "Done, Performing System Reboot"
+echo "-------------------------------------"
 init 6
