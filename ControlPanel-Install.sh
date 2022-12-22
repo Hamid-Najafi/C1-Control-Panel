@@ -116,13 +116,14 @@ echo "-------------------------------------"
 echo "Creating Service for Contold Panel Application"
 echo "-------------------------------------"
 journalctl --vacuum-time=60d
+loginctl enable-linger c1tech
+sudo -H -u c1tech bash << "EOF2"
 export XDG_RUNTIME_DIR=/run/user/1000
 export DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus
-loginctl enable-linger c1tech
 # /usr/lib/systemd/user/orcp.service
 # /etc/systemd/system/orcp.service
-mkdir -p ~/.config/systemd/user/orcp.service
-cat > ~/.config/systemd/user/orcp.service << "EOF"
+mkdir -p /home/c1tech/.config/systemd/user
+cat > /home/c1tech/.config/systemd/user/orcp.service << "EOF"
 [Unit]
 Description=C1Tech Operating Room Control Panel V2.0
 # After=pulseaudio.service
@@ -140,10 +141,11 @@ EOF
 
 systemctl --user daemon-reload
 systemctl --user enable orcp --now
-systemctl --user restart orcp
 systemctl --user status orcp
+EOF2
 
-# journalctl --user -unit orcp -f
+# systemctl --user restart orcp
+# journalctl --user --unit orcp --follow
 echo "-------------------------------------"
 echo "Configuring Splash Screen"
 echo "-------------------------------------"
@@ -183,5 +185,4 @@ python3 test_microphone.py -m fa
 sudo apt-get --purge autoremove pulseaudio
 # -------==========-------
 sudo rm /etc/systemd/system/orcp.service
-sudo systemctl disable orcp
 sudo systemctl daemon-reload

@@ -89,7 +89,7 @@ VoiceController::VoiceController(QObject *parent)
     QStringList ar;
     ar.append(mountPath);
     voiceProcess = new QProcess(this);
-    voiceProcess->start("python3",ar);
+    voiceProcess->startDetached("python3",ar);
 
 
     //! [create-objs]
