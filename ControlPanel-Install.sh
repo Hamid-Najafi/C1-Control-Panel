@@ -49,8 +49,12 @@ apt install -y pulseaudio
 echo "-------------------------------------"
 echo "Configuring Vosk"
 echo "-------------------------------------"
+string="options snd-hda-intel id=PCH,HDMI index=1,0"
+file="/etc/modprobe.d/alsa-base.conf"
+if ! grep -q "$string" "$file"; then
+  echo "$string" | tee -a "$file"
+fi
 sudo -H -u c1tech bash -c 'pip3 install sounddevice vosk'
-echo -e "options snd-hda-intel id=PCH,HDMI index=1,0" | tee -a /etc/modprobe.d/alsa-base.conf
 cat >> /home/c1tech/./DownloadVoskModel.py << EOF
 from vosk import Model
 model = Model(model_name="vosk-model-small-fa-0.5")
