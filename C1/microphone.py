@@ -53,8 +53,8 @@ try:
     if args.samplerate is None:
         device_info = sd.query_devices(args.device, "input")
         # soundfile expects an int, sounddevice provides a float:
-        # args.samplerate = int(device_info["default_samplerate"])
-        args.samplerate = int(8000)
+        # args.samplerate = int(16000)
+        args.samplerate = int(device_info["default_samplerate"])
 
     #model = Model(lang="en-us") model_name="vosk-model-small-fa-0.5"
     #model = Model("/home/reza/vosk-api/python/example/vosk-model-en-us-0.22")
