@@ -43,9 +43,9 @@ apt install -y libasound2-dev libpulse-dev gstreamer1.0-omx-* gstreamer1.0-alsa 
 apt purge -y pulseaudio
 rm -rf /etc/pulse
 apt install -y pulseaudio
-# amixer sset 'Master' 100%
-# amixer sset 'Capture' 85%
-# amixer sset 'Rear Mic Boost' 70%
+amixer sset 'Master' 100%
+amixer sset 'Capture' 85%
+amixer sset 'Rear Mic Boost' 70%
 echo "-------------------------------------"
 echo "Configuring Vosk"
 echo "-------------------------------------"
