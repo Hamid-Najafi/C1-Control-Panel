@@ -72,7 +72,12 @@ echo "c1tech Added to dialout, audio, video, input groups"
 echo "-------------------------------------"
 echo "Installing PJSIP"
 echo "-------------------------------------"
-git clone https://github.com/pjsip/pjproject.git
+url=" https://github.com/pjsip/pjproject.git"
+folder="/home/c1tech/pjproject"
+if ! git clone "${url}" "${folder}" 2>/dev/null && [ -d "${folder}" ] ; then
+    rm -rf "${folder}"
+    git clone "${url}" "${folder}"
+fi
 cd pjproject
 ./configure --prefix=/usr --enable-shared
 make dep -j4 
@@ -82,19 +87,30 @@ make install
 ldconfig
 # Verify that pjproject has been installed in the target location
 ldconfig -p | grep pj
+cd /home/c1tech/
 echo "-------------------------------------"
 echo "Installing USB Auto Mount"
 echo "-------------------------------------"
 apt install -y liblockfile-bin liblockfile1 lockfile-progs
-git clone https://github.com/rbrito/usbmount
-cd usbmount
+url="https://github.com/rbrito/usbmount"
+folder="/home/c1tech/usbmount"
+if ! git clone "${url}" "${folder}" 2>/dev/null && [ -d "${folder}" ] ; then
+    rm -rf "${folder}"
+    git clone "${url}" "${folder}"
+fi
+cd /home/c1tech/usbmount
 dpkg-buildpackage -us -uc -b
-cd ..
+cd /home/c1tech/
 dpkg -i usbmount_0.0.24_all.deb
 echo "-------------------------------------"
 echo "Installing Contold Panel Application"
 echo "-------------------------------------"
-git clone https://github.com/Hamid-Najafi/C1-Control-Panel.git /home/c1tech/C1-Control-Panel
+url="https://github.com/Hamid-Najafi/C1-Control-Panel.git"
+folder="/home/c1tech/C1-Control-Panel"
+if ! git clone "${url}" "${folder}" 2>/dev/null && [ -d "${folder}" ] ; then
+    rm -rf "${folder}"
+    git clone "${url}" "${folder}"
+fi
 mv /home/c1tech/C1-Control-Panel/C1 /home/c1tech/
 cd /home/c1tech/C1-Control-Panel/Panel
 touch -r *.*
