@@ -8,7 +8,9 @@
 # Password: 1478963
 # -------==========-------
 # To Run This Script
-# wget https://raw.githubusercontent.com/Hamid-Najafi/C1-Control-Panel/main/ControlPanel-Update.sh && chmod +x ControlPanel-Install.sh && sudo ./ControlPanel-Install.sh
+# wget https://raw.githubusercontent.com/Hamid-Najafi/C1-Control-Panel/main/ControlPanel-Update.sh && chmod +x ControlPanel-Update.sh && sudo ./ControlPanel-Update.sh
+# OR
+# wget https://b2n.ir/e44282 -O CP-Update.sh && chmod +x CP-Update.sh && sudo ./CP-Update.sh
 # -------==========-------
 echo "-------------------------------------"
 echo "Updating Contold Panel Application"
@@ -26,7 +28,7 @@ qmake
 make -j4 
 
 chown -R c1tech:c1tech /home/c1tech/C1
-chown -R c1tech:c1tech /home/c1tech/C1-Control-panel
+chown -R c1tech:c1tech /home/c1tech/C1-Control-Panel
 
 sudo -H -u c1tech bash << "EOF"
 systemctl --user restart orcp

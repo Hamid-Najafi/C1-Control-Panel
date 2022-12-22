@@ -9,6 +9,8 @@
 # -------==========-------
 # To Run This Script
 # wget https://raw.githubusercontent.com/Hamid-Najafi/C1-Control-Panel/main/ControlPanel-Install.sh && chmod +x ControlPanel-Install.sh && sudo ./ControlPanel-Install.sh
+# OR
+# wget https://b2n.ir/g03701 -O CP-Install.sh && chmod +x CP-Install.sh && sudo ./CP-Install.sh
 # -------==========-------
 echo "-------------------------------------"
 echo "Setting Hostname"
