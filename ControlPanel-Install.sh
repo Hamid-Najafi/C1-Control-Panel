@@ -39,9 +39,15 @@ apt install -y qml-module-qtquick* qml-module-qt-labs-settings qml-module-qtgrap
 echo "-------------------------------------"
 echo "Configuring Music"
 echo "-------------------------------------"
-apt install -y alsa alsa-tools alsa-utils
-apt install -y portaudio19-dev libportaudio2 libportaudiocpp0
-apt install -y libasound2-dev libpulse-dev gstreamer1.0-omx-* gstreamer1.0-alsa gstreamer1.0-plugins-good libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev 
+apt install -y alsa alsa-tools alsa-utils pulseaudio portaudio19-dev libportaudio2 libportaudiocpp0
+apt install -y libasound2-dev libpulse-dev gstreamer1.0-omx-* gstreamer1.0-alsa gstreamer1.0-plugins-good libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev  
+apt purge pulseaudio
+rm -rf /etc/pulse
+apt install -y pulseaudio
+amixer sset 'Master' 100%
+amixer sset 'Capture' 85%
+amixer sset 'Rear Mic Boost' 70%
+alsactl store
 echo "-------------------------------------"
 echo "Configuring Vosk"
 echo "-------------------------------------"
@@ -98,24 +104,34 @@ echo "-------------------------------------"
 echo "Creating Service for Contold Panel Application"
 echo "-------------------------------------"
 journalctl --vacuum-time=60d
+export XDG_RUNTIME_DIR=/run/user/1000
+export DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus
+loginctl enable-linger c1tech
 # /usr/lib/systemd/user/orcp.service
-cat > /etc/systemd/system/orcp.service << "EOF"
+# /etc/systemd/system/orcp.service
+mkdir -p ~/.config/systemd/user/orcp.service
+cat > ~/.config/systemd/user/orcp.service << "EOF"
 [Unit]
 Description=C1Tech Operating Room Control Panel V2.0
+# After=pulseaudio.service
 
 [Service]
+# Type=idle
 Environment="XDG_RUNTIME_DIR=/run/user/1000"
+Environment="DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus"
 ExecStart=/home/c1tech/C1-Control-Panel/Panel/panel -platform eglfs
 Restart=always
-User=c1tech
+# User=c1tech
 [Install]
-WantedBy=multi-user.target
+WantedBy=default.target
 EOF
 
-systemctl daemon-reload
-systemctl enable orcp --now
-systemctl restart orcp
-# journalctl -u orcp -f
+systemctl --user daemon-reload
+systemctl --user enable orcp --now
+systemctl --user restart orcp
+systemctl --user status orcp
+
+# journalctl --user -unit orcp -f
 echo "-------------------------------------"
 echo "Configuring Splash Screen"
 echo "-------------------------------------"
@@ -144,11 +160,16 @@ init 6
 echo "-------------------------------------"
 echo "Test Mic and Spk"
 echo "-------------------------------------"
-apt install lame sox
+sudo apt install -y lame sox libsox-fmt-mp3
+
 arecord -v -f cd -t raw | lame -r - output.mp3
 play output.mp3
 # -------==========-------
 wget https://raw.githubusercontent.com/alphacep/vosk-api/master/python/example/test_microphone.py
 python3 test_microphone.py -m fa
 # -------==========-------
-sudo apt-get --purge --reinstall install pulseaudio
+sudo apt-get --purge autoremove pulseaudio
+# -------==========-------
+sudo rm /etc/systemd/system/orcp.service
+sudo systemctl disable orcp
+sudo systemctl daemon-reload
