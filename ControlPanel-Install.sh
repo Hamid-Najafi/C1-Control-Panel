@@ -41,7 +41,7 @@ echo "Configuring Music"
 echo "-------------------------------------"
 apt install -y alsa alsa-tools alsa-utils pulseaudio portaudio19-dev libportaudio2 libportaudiocpp0
 apt install -y libasound2-dev libpulse-dev gstreamer1.0-omx-* gstreamer1.0-alsa gstreamer1.0-plugins-good libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev  
-apt purge pulseaudio
+apt purge -y pulseaudio
 rm -rf /etc/pulse
 apt install -y pulseaudio
 amixer sset 'Master' 100%
@@ -51,15 +51,15 @@ alsactl store
 echo "-------------------------------------"
 echo "Configuring Vosk"
 echo "-------------------------------------"
-/bin/su -s /bin/bash -c 'pip3 install sounddevice vosk' c1tech
+sudo -H -u c1tech bash -c 'pip3 install sounddevice vosk'
 echo -e "options snd-hda-intel id=PCH,HDMI index=1,0" | tee -a /etc/modprobe.d/alsa-base.conf
-cat >> ./DownloadVoskModel.py << EOF
+cat >> /home/c1tech/./DownloadVoskModel.py << EOF
 from vosk import Model
 model = Model(model_name="vosk-model-small-fa-0.5")
 exit()
 EOF
-python3 ./DownloadVoskModel.py
-rm ./DownloadVoskModel.py 
+sudo -H -u c1tech bash -c 'python3 /home/c1tech/./DownloadVoskModel.py'
+rm /home/c1tech/./DownloadVoskModel.py
 #alsamixer
 echo "-------------------------------------"
 echo "Configuring User Groups"
