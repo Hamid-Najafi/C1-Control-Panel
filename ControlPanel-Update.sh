@@ -31,5 +31,7 @@ chown -R c1tech:c1tech /home/c1tech/C1
 chown -R c1tech:c1tech /home/c1tech/C1-Control-Panel
 
 sudo -H -u c1tech bash << "EOF"
+export XDG_RUNTIME_DIR=/run/user/1000
+export DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus
 systemctl --user restart orcp
 EOF

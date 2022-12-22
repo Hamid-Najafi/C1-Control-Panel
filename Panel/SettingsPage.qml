@@ -15,7 +15,7 @@ Item {
     property alias audioText: cobAudioOutput.currentText
     property int selectedMenu: 1
     property bool isVoiceActive: true
-    property int voiceCommandLevel: sldVoiceCommandLevel.value
+    property alias voiceCommandLevel: sldVoiceCommandLevel.value
 
     signal cancelClicked();
     signal saveClicked();

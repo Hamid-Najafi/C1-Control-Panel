@@ -73,6 +73,9 @@ usermod -a -G audio c1tech
 usermod -a -G video c1tech
 usermod -a -G input c1tech
 echo "c1tech user added to dialout, audio, video & input groups"
+# Give c1tech Reboot Permision
+chown root:c1tech /bin/systemctl
+sudo chmod 4755 /bin/systemctl
 echo "-------------------------------------"
 echo "Installing PJSIP"
 echo "-------------------------------------"
