@@ -111,7 +111,7 @@ if ! git clone "${url}" "${folder}" 2>/dev/null && [ -d "${folder}" ] ; then
     rm -rf "${folder}"
     git clone "${url}" "${folder}"
 fi
-mv /home/c1tech/C1-Control-Panel/C1 /home/c1tech/
+mv -f /home/c1tech/C1-Control-Panel/C1 /home/c1tech/
 cd /home/c1tech/C1-Control-Panel/Panel
 touch -r *.*
 qmake
