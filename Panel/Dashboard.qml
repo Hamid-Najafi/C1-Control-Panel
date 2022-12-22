@@ -1031,7 +1031,7 @@ Item {
             }
             onSaveClicked:{
 
-                //timeController.resetDevice();
+                timeController.resetDevice();
             }
         }
 

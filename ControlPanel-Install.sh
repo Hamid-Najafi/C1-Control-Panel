@@ -47,7 +47,7 @@ rm -rf /etc/pulse
 apt install -y pulseaudio
 amixer sset 'Master' 100%
 amixer sset 'Capture' 85%
-amixer sset 'Rear Mic Boost' 70%
+# amixer sset 'Rear Mic Boost' 70%
 echo "-------------------------------------"
 echo "Configuring Vosk"
 echo "-------------------------------------"
