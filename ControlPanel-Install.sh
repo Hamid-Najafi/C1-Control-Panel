@@ -8,9 +8,8 @@
 # Password: 1478963
 # -------==========-------
 # To Run This Script
-# wget https://raw.githubusercontent.com/Hamid-Najafi/C1-Control-Panel/main/ControlPanel-Install.sh 
-# chmod +x ControlPanel-Install.sh 
-# sudo ./ControlPanel-Install.sh
+# wget https://raw.githubusercontent.com/Hamid-Najafi/C1-Control-Panel/main/ControlPanel-Install.sh && chmod +x ControlPanel-Install.sh && sudo ./ControlPanel-Install.sh
+# -------==========-------
 echo "-------------------------------------"
 echo "Setting Hostname"
 echo "-------------------------------------"
@@ -44,10 +43,9 @@ apt install -y libasound2-dev libpulse-dev gstreamer1.0-omx-* gstreamer1.0-alsa 
 apt purge -y pulseaudio
 rm -rf /etc/pulse
 apt install -y pulseaudio
-amixer sset 'Master' 100%
-amixer sset 'Capture' 85%
-amixer sset 'Rear Mic Boost' 70%
-alsactl store
+# amixer sset 'Master' 100%
+# amixer sset 'Capture' 85%
+# amixer sset 'Rear Mic Boost' 70%
 echo "-------------------------------------"
 echo "Configuring Vosk"
 echo "-------------------------------------"
@@ -112,6 +110,9 @@ cd /home/c1tech/C1-Control-Panel/Panel
 touch -r *.*
 qmake
 make -j4 
+
+chown -R c1tech:c1tech /home/c1tech/C1
+chown -R c1tech:c1tech /home/c1tech/C1-Control-Panel
 echo "-------------------------------------"
 echo "Creating Service for Contold Panel Application"
 echo "-------------------------------------"
@@ -132,6 +133,7 @@ Description=C1Tech Operating Room Control Panel V2.0
 # Type=idle
 Environment="XDG_RUNTIME_DIR=/run/user/1000"
 Environment="DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus"
+ExecStartPre=amixer sset 'Capture' 85% 
 ExecStart=/home/c1tech/C1-Control-Panel/Panel/panel -platform eglfs
 Restart=always
 # User=c1tech
