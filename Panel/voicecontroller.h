@@ -28,6 +28,8 @@ class VoiceController : public QObject
     QProcess *voiceProcess;
     QMediaPlaylist *m_playlist = nullptr;
     QMediaPlayer *m_player = nullptr;
+    bool isActive = true;
+    int voiceLevel = 50;
 
     bool isOnCall = false;
 public:
@@ -36,6 +38,9 @@ public:
     Q_PROPERTY(bool isWakeUp READ isWakeUp WRITE setIsWakeUp NOTIFY isWakeUpChanged)
 
     Q_INVOKABLE void setOnCall(bool val);
+    Q_INVOKABLE void setActive(bool val);
+    Q_INVOKABLE void setLevel(int val);
+
     bool connected() const;
     void setConnected(bool newConnected);
 

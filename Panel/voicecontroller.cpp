@@ -112,6 +112,17 @@ void VoiceController::setOnCall(bool val)
     isOnCall = val;
 }
 
+void VoiceController::setActive(bool val)
+{
+    isActive = val;
+}
+void VoiceController::setLevel(int val)
+{
+    QProcess p;
+    p.start(QString("amixer sset 'Capture' %1").arg(val)+ "%");
+    p.waitForFinished();
+}
+
 bool VoiceController::connected() const
 {
     return m_connected;
@@ -127,6 +138,7 @@ void VoiceController::setConnected(bool newConnected)
 
 void VoiceController::parseCommand(const VoiceData *data)
 {
+    if(!isActive) return;
     if(isOnCall) {m_player->stop();setIsWakeUp(false);return;}
     if(data->text.contains("سیمان"))
     {

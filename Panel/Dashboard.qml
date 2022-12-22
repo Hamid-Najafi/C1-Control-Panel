@@ -22,6 +22,8 @@ Item {
         property alias sipUsername: settings.sipUsername
         property alias sipPassword: settings.sipPassword
         property alias audioText: settings.audioText
+        property alias isVoiceCommandActive: settings.isVoiceActive
+        property alias voiceCommandLevel: settings.voiceCommandLevel
         Component.onCompleted: {
             pgIntercom.sipServer = sipServer;
             pgIntercom.sipPort = sipPort;
@@ -29,6 +31,13 @@ Item {
             pgIntercom.sipUsername = sipUsername;
             pgIntercom.sipPassword = sipPassword;
             pgIntercom.connect();
+        }
+        onIsVoiceCommandActiveChanged: {
+            voiceController.setActive(isVoiceCommandActive);
+        }
+
+        onVoiceCommandLevelChanged: {
+            voiceController.setLevel(voiceCommandLevel);
         }
     }
 

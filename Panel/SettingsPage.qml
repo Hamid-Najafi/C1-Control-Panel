@@ -14,6 +14,8 @@ Item {
     property alias sipPassword: txtSipPassword.text
     property alias audioText: cobAudioOutput.currentText
     property int selectedMenu: 1
+    property bool isVoiceActive: true
+    property int voiceCommandLevel: sldVoiceCommandLevel.value
 
     signal cancelClicked();
     signal saveClicked();
@@ -164,7 +166,7 @@ Item {
         mIsActive: (root.selectedMenu == 1)
         anchors.top: parent.top
         anchors.left: parent.left
-        width: parent.width
+        width: parent.width / 2
         height: 128
         onMClicked: {
             root.selectedMenu = 1;
@@ -200,6 +202,23 @@ Item {
             root.selectedMenu = 3;
         }
     }
+
+    RnTabMenutItem {
+        id: menuVoice
+        mText: "Voic Command"
+        mIconOff: Icons.musicVolume2_off
+        mIconOn: Icons.musicVolume2_on
+        mIsActive: (root.selectedMenu == 4)
+        anchors.top: parent.top
+        anchors.left: menuIntercom.right
+        width: parent.width / 2
+        height: 128
+        onMClicked: {
+            root.selectedMenu = 4;
+        }
+    }
+
+
 
     StackLayout {
         id: menuLayouts
@@ -533,6 +552,98 @@ Item {
 
             }
         }
+        Item {
+            id: voiceTab
+            Rectangle{
+                id: rectVoiceCommand
+                anchors.centerIn: parent
+                height: 640
+                width: 640
+                color: "transparent"
+                Text {
+                    id: txtVoiceCommandActiveLabel
+                    text: "Active Voice Command: "
+                    color: Colors.white1
+                    anchors.left: parent.left
+                    anchors.top: parent.top
+                    anchors.topMargin: 16
+                    height: 68
+                    width: 240
+                    horizontalAlignment: Text.AlignRight
+                    verticalAlignment: Text.AlignVCenter
+                    font.family: "Far.Nazanin"
+                    font.pixelSize: 28
+                    font.styleName: "Light"
+                    font.weight: Font.DemiBold
+                    fontSizeMode: Text.Fit
+                }
+                Rectangle{
+                    id: rectVoiceCommandActive
+                    color: root.isVoiceActive ? Colors.orange : "transparent"
+                    anchors.left: txtVoiceCommandActiveLabel.right
+                    anchors.leftMargin: 32
+                    anchors.top: parent.top
+                    anchors.topMargin: 16
+                    border.color: Colors.white
+                    border.width: 2
+                    clip: true
+                    width: 400 - 32
+                    height: 68
+                    radius: 4
+                    MouseArea{
+                        anchors.fill: parent
+                        onClicked: {
+                            root.isVoiceActive = !root.isVoiceActive;
+                        }
+                    }
+                }
+                Text {
+                    id: txtVoiceCommandLevel
+                    text: "Level: "
+                    color: Colors.white1
+                    anchors.left: parent.left
+                    anchors.top: txtVoiceCommandActiveLabel.bottom
+                    anchors.topMargin: 16
+                    height: 68
+                    width: 240
+                    horizontalAlignment: Text.AlignRight
+                    verticalAlignment: Text.AlignVCenter
+                    font.family: "Far.Nazanin"
+                    font.pixelSize: 28
+                    font.styleName: "Light"
+                    font.weight: Font.DemiBold
+                    fontSizeMode: Text.Fit
+                }
+                Rectangle{
+                    id: rectVoiceCommandLevel
+                    color: "transparent"
+                    anchors.left: txtVoiceCommandLevel.right
+                    anchors.leftMargin: 32
+                    anchors.top: txtVoiceCommandActiveLabel.bottom
+                    anchors.topMargin: 16
+                    border.color: Colors.white
+                    border.width: 0
+                    clip: true
+                    width: 400 - 32
+                    height: 68
+                    radius: 4
+                    Slider{
+                        id: sldVoiceCommandLevel
+                        orientation: "Horizontal"
+                        from: 0
+                        to: 100
+                        anchors.fill: parent
+                        font.family: "Far.Nazanin"
+                        font.pixelSize: 36
+                        font.styleName: "Light"
+                        font.weight: Font.DemiBold
+                    }
+
+                }
+
+            }
+
+        }
     }
 
     Rectangle{
@@ -628,6 +739,8 @@ Item {
         menuHostname.enabled = false;
         menuLayouts.visible = false;
         menuLayouts.enabled = false;
+        menuVoice.visible = false;
+        menuVoice.enabled = false;
         rectButtons.visible = false;
         rectButtons.enabled = false;
 
@@ -644,6 +757,8 @@ Item {
         menuHostname.enabled = false;
         menuLayouts.visible = true;
         menuLayouts.enabled = true;
+        menuVoice.visible = true;
+        menuVoice.enabled = true;
         rectButtons.visible = true;
         rectButtons.enabled = true;
     }
