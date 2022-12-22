@@ -107,7 +107,7 @@ folder="/home/c1tech/C1-Control-Panel"
 git clone "${url}" "${folder}"
 folder="/home/c1tech/C1"
 [ -d "${folder}" ] && rm -rf "${folder}"    
-mv -f /home/c1tech/C1-Control-Panel/C1 /home/c1tech/
+mv /home/c1tech/C1-Control-Panel/C1 /home/c1tech/
 cd /home/c1tech/C1-Control-Panel/Panel
 touch -r *.*
 qmake
