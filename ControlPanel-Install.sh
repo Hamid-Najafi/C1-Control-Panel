@@ -146,10 +146,10 @@ WantedBy=default.target
 EOF
 
 systemctl --user daemon-reload
-systemctl --user enable orcp --now
-systemctl --user status orcp
+systemctl --user enable orcp
 EOF2
 
+# systemctl --user status orcp
 # systemctl --user restart orcp
 # journalctl --user --unit orcp --follow
 echo "-------------------------------------"
