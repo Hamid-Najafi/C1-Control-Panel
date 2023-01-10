@@ -131,6 +131,7 @@ Item {
         mHeight: Backend.getGridItemHeight(root.width,root.height,3,6,1,3) - root._singleHeightMargin * 2
         mHeader: "Prismatic"
         mSubHeader: "Rect Light 1"
+        isDimable: false
         onMPercentChanged: {
             //mIsActive = !mIsActive;
         }
@@ -149,6 +150,7 @@ Item {
         mHeight: Backend.getGridItemHeight(root.width,root.height,3,6,1,3) - root._singleHeightMargin * 2
         mHeader: "Prismatic"
         mSubHeader: "Rect Light 2"
+        isDimable: false
         onMPercentChanged: {
             //mIsActive = !mIsActive;
         }

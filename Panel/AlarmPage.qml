@@ -58,7 +58,7 @@ Item {
         y: Backend.getGridItemY(root.width,root.height,3,3,1,1,2,2) + root._singleHeightMargin
         mWidth: Backend.getGridItemWidth(root.width,root.height,3,3,1,1) - root._singleWidthMargin * 2
         mHeight: Backend.getGridItemHeight(root.width,root.height,3,3,1,1) - root._singleHeightMargin * 2
-        mText: "H2O"
+        mText: "N2O"
         mIsActive: false
         mIconOff: Icons.alarm_off
         mIconOn: Icons.alarm_on

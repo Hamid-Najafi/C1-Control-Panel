@@ -12,7 +12,8 @@ Item {
     property alias mWidth : root.width
     property alias mHeight : root.height
     property int mValue : 0
-    property string mLink
+    property string mLink: ""
+    property bool isDimable: true
     property int size : root.height - 32
     signal mPercentChanged(int percent);
     signal mReleased(int percent);
@@ -58,7 +59,7 @@ Item {
     }
 
     onMValueChanged: {
-
+        if(!root.isDimable && root.mValue >0) root.mValue =100;
         let result = (baseShapePath.sweepAngle * root.mValue) / 100;
         let startAngle = 360 - baseShapePath.startAngle;
         let value = Math.abs(result);;
@@ -82,13 +83,37 @@ Item {
         precentShape.sweepAngle = result;
     }
 
-
+    MouseArea{
+        anchors.fill: parent
+        onClicked: {
+            if(!root.isDimable){
+                let totalAngle = Math.abs(baseShapePath.sweepAngle);
+                let percent = Math.abs(precentShape.sweepAngle) > (.99 * totalAngle) ? 0 : 100;
+                let value = totalAngle * percent / 100;
+                if(value < 180){
+                    percentShapeArc1.useLargeArc = false;
+                    percentShapeArc2.useLargeArc = false;
+                }
+                else {
+                    percentShapeArc1.useLargeArc = true;
+                    percentShapeArc2.useLargeArc = true;
+                }
+                txtPercent.text =  percent.toFixed(0) + "%";
+                let result =  (baseShapePath.sweepAngle * percent) / 100;
+                precentShape.sweepAngle = result;
+                root.mValue = percent;
+                root.mReleased(percent);
+                root.mPercentChanged(percent);
+                return;
+            }
+        }
+    }
 
     Rectangle {
         id: rectBackground
         anchors.fill: parent
         radius: 8
-        color : "#000000"
+        color : "#01000000"
         opacity: 0
 
     }
@@ -287,9 +312,11 @@ Item {
             anchors.fill: parent
             property bool pressActive: false;
             onPressed: {
+                if(!root.isDimable) return;
                 percentMouseArea.pressActive = true;
             }
             onReleased: {
+                if(!root.isDimable) return;
                 percentMouseArea.pressActive = false;
                 let result = (precentShape.sweepAngle * 100.0) / baseShapePath.sweepAngle;
                 let precent = result.toFixed(0);
@@ -298,6 +325,7 @@ Item {
                 root.mReleased(precent);
             }
             onPositionChanged: {
+                if(!root.isDimable) return;
                 if(!percentMouseArea.pressActive) return;
                 let x = mouse.x - root.size / 2;
                 let y = -(mouse.y - root.size / 2);
