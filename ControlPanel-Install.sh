@@ -19,6 +19,10 @@ echo "Set New Hostname: (ORCP-Floor-Room)"
 read hostname
 hostnamectl set-hostname $hostname
 echo "-------------------------------------"
+echo "Setting TimeZone"
+echo "-------------------------------------"
+timedatectl set-timezone Asia/Tehran 
+echo "-------------------------------------"
 echo "Installing Pre-Requirements"
 echo "-------------------------------------"
 export DEBIAN_FRONTEND=noninteractive
