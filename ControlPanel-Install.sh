@@ -33,7 +33,7 @@ echo "-------------------------------------"
 echo "Installing Qt & Tools"
 echo "-------------------------------------"
 apt install -y mesa-common-dev libfontconfig1 libxcb-xinerama0 libglu1-mesa-dev
-apt install -y qtbase5-dev qt5-qmake libqt5quickcontrols2-5 libqt5virtualkeyboard5*  libqt5webengine5 qtmultimedia5* libqt5serial*  libqt5multimedia*   qtwebengine5-dev libqt5svg5-dev libqt5qml5 libqt5quick5  qttools5*
+apt install -y qtbase5-dev qt5-qmake libqt5quickcontrols2-5 libqt5virtualkeyboard5* qtvirtualkeyboard-plugin libqt5webengine5 qtmultimedia5* libqt5serial*  libqt5multimedia*   qtwebengine5-dev libqt5svg5-dev libqt5qml5 libqt5quick5  qttools5*
 apt install -y qml-module-qtquick* qml-module-qt-labs-settings qml-module-qtgraphicaleffects
 # apt install -y qtcreator
 # add-apt-repository ppa:beineri/opt-qt-5.15.4-focal
