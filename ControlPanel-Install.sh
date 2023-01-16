@@ -37,7 +37,7 @@ apt install -y debhelper build-essential gcc g++ gdb cmake
 echo "-------------------------------------"
 echo "Installing Qt & Tools"
 echo "-------------------------------------"
-apt install -y mesa-common-dev libfontconfig1 libxcb-xinerama0 libglu1-mesa-dev
+apt install -y mesa-common-dev libfontconfig1 libxcb-xinerama0 libglu1-mesa-dev zip unzip
 apt install -y qtbase5-dev qt5-qmake libqt5quickcontrols2-5 libqt5virtualkeyboard5* qtvirtualkeyboard-plugin libqt5webengine5 qtmultimedia5* libqt5serial*  libqt5multimedia*   qtwebengine5-dev libqt5svg5-dev libqt5qml5 libqt5quick5  qttools5*
 apt install -y qml-module-qtquick* qml-module-qt-labs-settings qml-module-qtgraphicaleffects
 # apt install -y qtcreator
@@ -54,8 +54,8 @@ apt install -y libasound2-dev libpulse-dev gstreamer1.0-omx-* gstreamer1.0-alsa 
 apt purge -y pulseaudio
 rm -rf /etc/pulse
 apt install -y pulseaudio
-# amixer sset 'Master' 100%
-# amixer sset 'Capture' 85%
+amixer sset 'Master' 100%
+amixer sset 'Capture' 85%
 # amixer sset 'Rear Mic Boost' 70%
 echo "-------------------------------------"
 echo "Configuring Vosk"
@@ -66,13 +66,17 @@ if ! grep -q "$string" "$file"; then
   echo "$string" | tee -a "$file"
 fi
 sudo -H -u c1tech bash -c 'pip3 install sounddevice vosk'
-cat >> /home/c1tech/./DownloadVoskModel.py << EOF
-from vosk import Model
-model = Model(model_name="vosk-model-small-fa-0.5")
-exit()
-EOF
-sudo -H -u c1tech bash -c 'python3 /home/c1tech/./DownloadVoskModel.py'
-rm /home/c1tech/./DownloadVoskModel.py
+mkdir -p /home/c1tech/.cache/vosk
+# Manually Download Model Because of Sanctions!
+wget https://raw.githubusercontent.com/Hamid-Najafi/C1-Control-Panel/main/vosk-model-small-fa-0.5.zip -P /home/c1tech/.cache/vosk
+unzip /home/c1tech/.cache/vosk/vosk-model-small-fa-0.5.zip -d /home/c1tech/.cache/vosk
+# cat >> /home/c1tech/./DownloadVoskModel.py << EOF
+# from vosk import Model
+# model = Model(model_name="vosk-model-small-fa-0.5")
+# exit()
+# EOF
+# sudo -H -u c1tech bash -c 'python3 /home/c1tech/./DownloadVoskModel.py'
+# rm /home/c1tech/./DownloadVoskModel.py
 #alsamixer
 echo "-------------------------------------"
 echo "Configuring User Groups"
@@ -136,33 +140,24 @@ echo "Creating Service for Contold Panel Application"
 echo "-------------------------------------"
 journalctl --vacuum-time=60d
 loginctl enable-linger c1tech
-sudo -H -u c1tech bash << "EOF2"
-export XDG_RUNTIME_DIR=/run/user/1000
-export DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus
-# /usr/lib/systemd/user/orcp.service
-# /etc/systemd/system/orcp.service
+
 mkdir -p /home/c1tech/.config/systemd/user
 cat > /home/c1tech/.config/systemd/user/orcp.service << "EOF"
 [Unit]
 Description=C1Tech Operating Room Control Panel V2.0
-# After=pulseaudio.service
 
 [Service]
-# Type=idle
-Environment="XDG_RUNTIME_DIR=/run/user/1000"
-Environment="DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus"
+# Environment="XDG_RUNTIME_DIR=/run/user/1000"
+# Environment="DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus"
 ExecStartPre=amixer sset 'Capture' 85% 
 ExecStart=/home/c1tech/C1-Control-Panel/Panel/panel -platform eglfs
 Restart=always
-# User=c1tech
+
 [Install]
 WantedBy=default.target
 EOF
 
-systemctl --user daemon-reload
-systemctl --user enable orcp
-EOF2
-
+runuser -l c1tech -c 'export XDG_RUNTIME_DIR=/run/user/$UID && export DBUS_SESSION_BUS_ADDRESS=unix:path=$XDG_RUNTIME_DIR/bus && systemctl --user daemon-reload && systemctl --user enable orcp'
 # systemctl --user status orcp
 # systemctl --user restart orcp
 # journalctl --user --unit orcp --follow
