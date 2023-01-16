@@ -161,6 +161,7 @@ Restart=always
 [Install]
 WantedBy=default.target
 EOF
+runuser -l c1tech -c 'export XDG_RUNTIME_DIR=/run/user/$UID && export DBUS_SESSION_BUS_ADDRESS=unix:path=$XDG_RUNTIME_DIR/bus && systemctl --user daemon-reload && systemctl --user enable orcp'
 # systemctl --user status orcp
 # systemctl --user restart orcp
 # journalctl --user --unit orcp --follow
