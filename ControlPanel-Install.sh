@@ -94,10 +94,23 @@ usermod -a -G audio c1tech
 usermod -a -G video c1tech
 usermod -a -G input c1tech
 echo "c1tech user added to dialout, audio, video & input groups"
-# Give c1tech Reboot Permision
-chown root:c1tech /bin/systemctl
-sudo chmod 4755 /bin/systemctl
-runuser -l c1tech -c 'export XDG_RUNTIME_DIR=/run/user/$UID && export DBUS_SESSION_BUS_ADDRESS=unix:path=$XDG_RUNTIME_DIR/bus && systemctl --user daemon-reload && systemctl --user enable orcp'
+echo "-------------------------------------"
+echo "Installing PJSIP"
+echo "-------------------------------------"
+url="https://github.com/pjsip/pjproject.git"
+folder="/home/c1tech/pjproject"
+[ -d "${folder}" ] && rm -rf "${folder}"    
+git clone "${url}" "${folder}"
+cd pjproject
+./configure --prefix=/usr --enable-shared
+make dep -j4 
+make -j4
+make install
+# Update shared library links.
+ldconfig
+# Verify that pjproject has been installed in the target location
+ldconfig -p | grep pj
+cd /home/c1tech/
 echo "-------------------------------------"
 echo "Installing USB Auto Mount"
 echo "-------------------------------------"
@@ -152,25 +165,6 @@ EOF
 # systemctl --user restart orcp
 # journalctl --user --unit orcp --follow
 echo "-------------------------------------"
-echo "Installing PJSIP"
-echo "-------------------------------------"
-url="https://github.com/pjsip/pjproject.git"
-folder="/home/c1tech/pjproject"
-[ -d "${folder}" ] && rm -rf "${folder}"    
-git clone "${url}" "${folder}"
-cd pjproject
-./configure --prefix=/usr --enable-shared
-make dep -j4 
-make -j4
-make install
-runuser -l c1tech -c 'export XDG_RUNTIME_DIR=/run/user/$UID && export DBUS_SESSION_BUS_ADDRESS=unix:path=$XDG_RUNTIME_DIR/bus && systemctl --user daemon-reload && systemctl --user enable orcp'
-# Update shared library links.
-ldconfig
-# Verify that pjproject has been installed in the target location
-ldconfig -p | grep pj
-cd /home/c1tech/
-runuser -l c1tech -c 'export XDG_RUNTIME_DIR=/run/user/$UID && export DBUS_SESSION_BUS_ADDRESS=unix:path=$XDG_RUNTIME_DIR/bus && systemctl --user daemon-reload && systemctl --user enable orcp'
-echo "-------------------------------------"
 echo "Configuring Splash Screen"
 echo "-------------------------------------"
 sed -i 's/GRUB_CMDLINE_LINUX_DEFAULT=""/GRUB_CMDLINE_LINUX_DEFAULT="quiet splash"/g' /etc/default/grub
@@ -191,6 +185,9 @@ update-initramfs -u
 echo "-------------------------------------"
 echo "Done, Performing System Reboot"
 echo "-------------------------------------"
+# Give c1tech Reboot Permision
+chown root:c1tech /bin/systemctl
+sudo chmod 4755 /bin/systemctl
 init 6
 echo "-------------------------------------"
 echo "Test Mic and Spk"
