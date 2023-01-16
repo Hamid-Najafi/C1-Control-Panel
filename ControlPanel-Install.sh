@@ -30,6 +30,19 @@ timedatectl set-timezone Asia/Tehran
 echo "-------------------------------------"
 echo "Installing Pre-Requirements"
 echo "-------------------------------------"
+string="ir.archive.ubuntu.com"
+file="/etc/apt/sources.list"
+if ! grep -q "$string" "$file"; then
+sudo mv /etc/apt/sources.list{,.bakup}
+cat > /etc/apt/sources.list << "EOF"
+deb http://ir.archive.ubuntu.com/ubuntu jammy main restricted universe multiverse
+deb http://ir.archive.ubuntu.com/ubuntu jammy-updates main restricted universe multiverse
+deb http://ir.archive.ubuntu.com/ubuntu jammy-backports main restricted universe multiverse
+deb http://ir.archive.ubuntu.com/ubuntu jammy-security main restricted universe multiverse
+EOF
+fi
+# sudo sh -c "echo 'deb [trusted=yes] https://ubuntu.iranrepo.ir jammy main restricted universe multiverse' >> /etc/apt/sources.list"
+
 export DEBIAN_FRONTEND=noninteractive
 apt update && apt upgrade -y
 apt install -y software-properties-common git avahi-daemon python3-pip 
@@ -40,12 +53,6 @@ echo "-------------------------------------"
 apt install -y mesa-common-dev libfontconfig1 libxcb-xinerama0 libglu1-mesa-dev zip unzip
 apt install -y qtbase5-dev qt5-qmake libqt5quickcontrols2-5 libqt5virtualkeyboard5* qtvirtualkeyboard-plugin libqt5webengine5 qtmultimedia5* libqt5serial*  libqt5multimedia*   qtwebengine5-dev libqt5svg5-dev libqt5qml5 libqt5quick5  qttools5*
 apt install -y qml-module-qtquick* qml-module-qt-labs-settings qml-module-qtgraphicaleffects
-# apt install -y qtcreator
-# add-apt-repository ppa:beineri/opt-qt-5.15.4-focal
-# apt update
-# apt-get install qt515-meta-minimal -y
-# apt-get install qt515-meta-full -y
-# export LD_LIBRARY_PATH=/opt/qt515/lib/
 echo "-------------------------------------"
 echo "Configuring Music"
 echo "-------------------------------------"
@@ -54,9 +61,6 @@ apt install -y libasound2-dev libpulse-dev gstreamer1.0-omx-* gstreamer1.0-alsa 
 apt purge -y pulseaudio
 rm -rf /etc/pulse
 apt install -y pulseaudio
-amixer sset 'Master' 100%
-amixer sset 'Capture' 85%
-# amixer sset 'Rear Mic Boost' 70%
 echo "-------------------------------------"
 echo "Configuring Vosk"
 echo "-------------------------------------"
@@ -68,8 +72,12 @@ fi
 sudo -H -u c1tech bash -c 'pip3 install sounddevice vosk'
 mkdir -p /home/c1tech/.cache/vosk
 # Manually Download Model Because of Sanctions!
-wget https://raw.githubusercontent.com/Hamid-Najafi/C1-Control-Panel/main/vosk-model-small-fa-0.5.zip -P /home/c1tech/.cache/vosk
-unzip /home/c1tech/.cache/vosk/vosk-model-small-fa-0.5.zip -d /home/c1tech/.cache/vosk
+if [ ! -f /home/c1tech/.cache/vosk/vosk-model-small-fa-0.5.zip]
+then
+  wget https://raw.githubusercontent.com/Hamid-Najafi/C1-Control-Panel/main/vosk-model-small-fa-0.5.zip -P /home/c1tech/.cache/vosk
+  unzip /home/c1tech/.cache/vosk/vosk-model-small-fa-0.5.zip -d /home/c1tech/.cache/vosk
+fi
+
 # cat >> /home/c1tech/./DownloadVoskModel.py << EOF
 # from vosk import Model
 # model = Model(model_name="vosk-model-small-fa-0.5")
@@ -89,23 +97,7 @@ echo "c1tech user added to dialout, audio, video & input groups"
 # Give c1tech Reboot Permision
 chown root:c1tech /bin/systemctl
 sudo chmod 4755 /bin/systemctl
-echo "-------------------------------------"
-echo "Installing PJSIP"
-echo "-------------------------------------"
-url="https://github.com/pjsip/pjproject.git"
-folder="/home/c1tech/pjproject"
-[ -d "${folder}" ] && rm -rf "${folder}"    
-git clone "${url}" "${folder}"
-cd pjproject
-./configure --prefix=/usr --enable-shared
-make dep -j4 
-make -j4
-make install
-# Update shared library links.
-ldconfig
-# Verify that pjproject has been installed in the target location
-ldconfig -p | grep pj
-cd /home/c1tech/
+runuser -l c1tech -c 'export XDG_RUNTIME_DIR=/run/user/$UID && export DBUS_SESSION_BUS_ADDRESS=unix:path=$XDG_RUNTIME_DIR/bus && systemctl --user daemon-reload && systemctl --user enable orcp'
 echo "-------------------------------------"
 echo "Installing USB Auto Mount"
 echo "-------------------------------------"
@@ -149,18 +141,35 @@ Description=C1Tech Operating Room Control Panel V2.0
 [Service]
 # Environment="XDG_RUNTIME_DIR=/run/user/1000"
 # Environment="DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus"
-ExecStartPre=amixer sset 'Capture' 85% 
+ExecStartPre=amixer sset 'Capture' 85% && amixer sset 'Master' 100%
 ExecStart=/home/c1tech/C1-Control-Panel/Panel/panel -platform eglfs
 Restart=always
 
 [Install]
 WantedBy=default.target
 EOF
-
-runuser -l c1tech -c 'export XDG_RUNTIME_DIR=/run/user/$UID && export DBUS_SESSION_BUS_ADDRESS=unix:path=$XDG_RUNTIME_DIR/bus && systemctl --user daemon-reload && systemctl --user enable orcp'
 # systemctl --user status orcp
 # systemctl --user restart orcp
 # journalctl --user --unit orcp --follow
+echo "-------------------------------------"
+echo "Installing PJSIP"
+echo "-------------------------------------"
+url="https://github.com/pjsip/pjproject.git"
+folder="/home/c1tech/pjproject"
+[ -d "${folder}" ] && rm -rf "${folder}"    
+git clone "${url}" "${folder}"
+cd pjproject
+./configure --prefix=/usr --enable-shared
+make dep -j4 
+make -j4
+make install
+runuser -l c1tech -c 'export XDG_RUNTIME_DIR=/run/user/$UID && export DBUS_SESSION_BUS_ADDRESS=unix:path=$XDG_RUNTIME_DIR/bus && systemctl --user daemon-reload && systemctl --user enable orcp'
+# Update shared library links.
+ldconfig
+# Verify that pjproject has been installed in the target location
+ldconfig -p | grep pj
+cd /home/c1tech/
+runuser -l c1tech -c 'export XDG_RUNTIME_DIR=/run/user/$UID && export DBUS_SESSION_BUS_ADDRESS=unix:path=$XDG_RUNTIME_DIR/bus && systemctl --user daemon-reload && systemctl --user enable orcp'
 echo "-------------------------------------"
 echo "Configuring Splash Screen"
 echo "-------------------------------------"
