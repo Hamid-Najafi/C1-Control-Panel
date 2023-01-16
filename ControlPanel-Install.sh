@@ -18,6 +18,8 @@ echo "-------------------------------------"
 echo "Set New Hostname: (ORCP-Floor-Room)"
 read hostname
 hostnamectl set-hostname $hostname
+127.0.1.1 orcp6-5
+printf "\n%s" "127.0.0.1 $hostname" >> /etc/hosts
 echo "-------------------------------------"
 echo "Setting TimeZone"
 echo "-------------------------------------"
@@ -49,8 +51,8 @@ apt install -y libasound2-dev libpulse-dev gstreamer1.0-omx-* gstreamer1.0-alsa 
 apt purge -y pulseaudio
 rm -rf /etc/pulse
 apt install -y pulseaudio
-amixer sset 'Master' 100%
-amixer sset 'Capture' 85%
+# amixer sset 'Master' 100%
+# amixer sset 'Capture' 85%
 # amixer sset 'Rear Mic Boost' 70%
 echo "-------------------------------------"
 echo "Configuring Vosk"
