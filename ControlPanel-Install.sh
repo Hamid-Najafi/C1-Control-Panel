@@ -18,8 +18,11 @@ echo "-------------------------------------"
 echo "Set New Hostname: (ORCP-Floor-Room)"
 read hostname
 hostnamectl set-hostname $hostname
-127.0.1.1 orcp6-5
-printf "\n%s" "127.0.0.1 $hostname" >> /etc/hosts
+string="$hostname"
+file="/etc/hosts"
+if ! grep -q "$string" "$file"; then
+  printf "\n%s" "127.0.0.1 $hostname" >> "$file"
+fi
 echo "-------------------------------------"
 echo "Setting TimeZone"
 echo "-------------------------------------"
@@ -174,9 +177,6 @@ apt -y install plymouth plymouth-themes
 # By default ubuntu-text is active 
 # /usr/share/plymouth/themes/ubuntu-text/ubuntu-text.plymouth
 # We Will use bgrt (which is same as spinner but manufacture logo is enabled) theme with our custom logo
-cp /usr/share/plymouth/themes/spinner/bgrt-fallback.png{,.bak}
-cp /usr/share/plymouth/themes/spinner/watermark.png{,.bak}
-cp /usr/share/plymouth/ubuntu-logo.png{,.bak}
 cp /home/c1tech/C1-Control-Panel/bgrt-c1.png /usr/share/plymouth/themes/spinner/bgrt-fallback.png
 cp /home/c1tech/C1-Control-Panel/watermark-empty.png /usr/share/plymouth/themes/spinner/watermark.png
 cp /home/c1tech/C1-Control-Panel/watermark-empty.png /usr/share/plymouth/ubuntu-logo.png
