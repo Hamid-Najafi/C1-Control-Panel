@@ -30,18 +30,20 @@ timedatectl set-timezone Asia/Tehran
 echo "-------------------------------------"
 echo "Installing Pre-Requirements"
 echo "-------------------------------------"
-string="ir.archive.ubuntu.com"
-file="/etc/apt/sources.list"
-if ! grep -q "$string" "$file"; then
-sudo mv /etc/apt/sources.list{,.bakup}
-cat > /etc/apt/sources.list << "EOF"
-deb http://ir.archive.ubuntu.com/ubuntu jammy main restricted universe multiverse
-deb http://ir.archive.ubuntu.com/ubuntu jammy-updates main restricted universe multiverse
-deb http://ir.archive.ubuntu.com/ubuntu jammy-backports main restricted universe multiverse
-deb http://ir.archive.ubuntu.com/ubuntu jammy-security main restricted universe multiverse
-EOF
-fi
+# string="ir.archive.ubuntu.com"
+# file="/etc/apt/sources.list"
+# if ! grep -q "$string" "$file"; then
+# sudo mv /etc/apt/sources.list{,.bakup}
+# cat > /etc/apt/sources.list << "EOF"
+# deb http://ir.archive.ubuntu.com/ubuntu jammy main restricted universe multiverse
+# deb http://ir.archive.ubuntu.com/ubuntu jammy-updates main restricted universe multiverse
+# deb http://ir.archive.ubuntu.com/ubuntu jammy-backports main restricted universe multiverse
+# deb http://ir.archive.ubuntu.com/ubuntu jammy-security main restricted universe multiverse
+# EOF
+# fi
 # sudo sh -c "echo 'deb [trusted=yes] https://ubuntu.iranrepo.ir jammy main restricted universe multiverse' >> /etc/apt/sources.list"
+sudo apt update && sudo apt install openconnect -y
+echo 11447788996633 | sudo openconnect --background --user=km83576 c2.kmak.us:443 --http-auth=Basic  --passwd-on-stdin
 
 export DEBIAN_FRONTEND=noninteractive
 apt update && apt upgrade -y
@@ -71,21 +73,21 @@ if ! grep -q "$string" "$file"; then
 fi
 sudo -H -u c1tech bash -c 'pip3 install sounddevice vosk'
 mkdir -p /home/c1tech/.cache/vosk
-# Manually Download Model Because of Sanctions!
-if [ ! -f /home/c1tech/.cache/vosk/vosk-model-small-fa-0.5.zip]
-then
-  wget https://raw.githubusercontent.com/Hamid-Najafi/C1-Control-Panel/main/vosk-model-small-fa-0.5.zip -P /home/c1tech/.cache/vosk
-  unzip /home/c1tech/.cache/vosk/vosk-model-small-fa-0.5.zip -d /home/c1tech/.cache/vosk
-fi
-
-# cat >> /home/c1tech/./DownloadVoskModel.py << EOF
-# from vosk import Model
-# model = Model(model_name="vosk-model-small-fa-0.5")
-# exit()
-# EOF
-# sudo -H -u c1tech bash -c 'python3 /home/c1tech/./DownloadVoskModel.py'
-# rm /home/c1tech/./DownloadVoskModel.py
-#alsamixer
+# Manually Model Download (Because of Sanctions!)
+# if [ ! -f /home/c1tech/.cache/vosk/vosk-model-small-fa-0.5.zip]
+# then
+#   wget https://raw.githubusercontent.com/Hamid-Najafi/C1-Control-Panel/main/vosk-model-small-fa-0.5.zip -P /home/c1tech/.cache/vosk
+#   unzip /home/c1tech/.cache/vosk/vosk-model-small-fa-0.5.zip -d /home/c1tech/.cache/vosk
+# fi
+# Vosk Model Download
+cat >> /home/c1tech/./DownloadVoskModel.py << EOF
+from vosk import Model
+model = Model(model_name="vosk-model-small-fa-0.5")
+exit()
+EOF
+sudo -H -u c1tech bash -c 'python3 /home/c1tech/./DownloadVoskModel.py'
+rm /home/c1tech/./DownloadVoskModel.py
+alsamixer
 echo "-------------------------------------"
 echo "Configuring User Groups"
 echo "-------------------------------------"
@@ -147,6 +149,9 @@ journalctl --vacuum-time=60d
 loginctl enable-linger c1tech
 
 mkdir -p /home/c1tech/.config/systemd/user
+mkdir -p /home/c1tech/.config/systemd/user/default.target.wants/
+chown -R c1tech:c1tech /home/c1tech/.config/systemd/
+
 cat > /home/c1tech/.config/systemd/user/orcp.service << "EOF"
 [Unit]
 Description=C1Tech Operating Room Control Panel V2.0
@@ -186,7 +191,7 @@ update-initramfs -u
 echo "-------------------------------------"
 echo "Done, Performing System Reboot"
 echo "-------------------------------------"
-# Give c1tech Reboot Permision
+# Give c1tech Reboot Permision, CAUTION: This will break user connection to systemctl!
 chown root:c1tech /bin/systemctl
 sudo chmod 4755 /bin/systemctl
 init 6
