@@ -47,7 +47,7 @@ echo 11447788996633 | openconnect --background --user=km83576 c2.kmak.us:443 --h
 
 export DEBIAN_FRONTEND=noninteractive
 apt update && apt upgrade -y
-apt install -y software-properties-common git avahi-daemon python3-pip 
+apt install -y software-properties-common git avahi-daemon python3-pip nano
 apt install -y debhelper build-essential gcc g++ gdb cmake 
 echo "-------------------------------------"
 echo "Installing Qt & Tools"
