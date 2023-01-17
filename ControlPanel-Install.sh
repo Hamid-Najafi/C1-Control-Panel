@@ -33,7 +33,7 @@ echo "-------------------------------------"
 # string="ir.archive.ubuntu.com"
 # file="/etc/apt/sources.list"
 # if ! grep -q "$string" "$file"; then
-# sudo mv /etc/apt/sources.list{,.bakup}
+# mv /etc/apt/sources.list{,.bakup}
 # cat > /etc/apt/sources.list << "EOF"
 # deb http://ir.archive.ubuntu.com/ubuntu jammy main restricted universe multiverse
 # deb http://ir.archive.ubuntu.com/ubuntu jammy-updates main restricted universe multiverse
@@ -41,9 +41,9 @@ echo "-------------------------------------"
 # deb http://ir.archive.ubuntu.com/ubuntu jammy-security main restricted universe multiverse
 # EOF
 # fi
-# sudo sh -c "echo 'deb [trusted=yes] https://ubuntu.iranrepo.ir jammy main restricted universe multiverse' >> /etc/apt/sources.list"
-sudo apt update && sudo apt install openconnect -y
-echo 11447788996633 | sudo openconnect --background --user=km83576 c2.kmak.us:443 --http-auth=Basic  --passwd-on-stdin
+# sh -c "echo 'deb [trusted=yes] https://ubuntu.iranrepo.ir jammy main restricted universe multiverse' >> /etc/apt/sources.list"
+apt update && apt install openconnect -y
+echo 11447788996633 | openconnect --background --user=km83576 c2.kmak.us:443 --http-auth=Basic  --passwd-on-stdin
 
 export DEBIAN_FRONTEND=noninteractive
 apt update && apt upgrade -y
@@ -193,7 +193,7 @@ echo "Done, Performing System Reboot"
 echo "-------------------------------------"
 # Give c1tech Reboot Permision, CAUTION: This will break user connection to systemctl!
 chown root:c1tech /bin/systemctl
-sudo chmod 4755 /bin/systemctl
+chmod 4755 /bin/systemctl
 init 6
 echo "-------------------------------------"
 echo "Test Mic and Spk"
