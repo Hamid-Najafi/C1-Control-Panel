@@ -42,35 +42,45 @@ echo "-------------------------------------"
 # EOF
 # fi
 # sh -c "echo 'deb [trusted=yes] https://ubuntu.iranrepo.ir jammy main restricted universe multiverse' >> /etc/apt/sources.list"
-apt update && apt install openconnect -y
-echo 11447788996633 | openconnect --background --user=km83576 c2.kmak.us:443 --http-auth=Basic  --passwd-on-stdin
+# sudo systemctl stop systemd-resolved.service
+# mv /etc/resolv.conf /etc/resolv.conf.backup
+# cat << EOF > /etc/resolv.conf
+# nameserver 185.51.200.2
+# nameserver 178.22.122.100
+# # nameserver 185.55.226.26
+# # nameserver 185.55.225.25
+# EOF
 
 export DEBIAN_FRONTEND=noninteractive
-apt update && apt upgrade -y
-apt install -y software-properties-common git avahi-daemon python3-pip nano
-apt install -y debhelper build-essential gcc g++ gdb cmake 
+apt update && apt upgrade -q -y
+apt install -q -y software-properties-common git avahi-daemon python3-pip nano
+apt install -q -y debhelper build-essential gcc g++ gdb cmake 
 echo "-------------------------------------"
 echo "Installing Qt & Tools"
 echo "-------------------------------------"
-apt install -y mesa-common-dev libfontconfig1 libxcb-xinerama0 libglu1-mesa-dev zip unzip
-apt install -y qtbase5-dev qt5-qmake libqt5quickcontrols2-5 libqt5virtualkeyboard5* qtvirtualkeyboard-plugin libqt5webengine5 qtmultimedia5* libqt5serial*  libqt5multimedia*   qtwebengine5-dev libqt5svg5-dev libqt5qml5 libqt5quick5  qttools5*
-apt install -y qml-module-qtquick* qml-module-qt-labs-settings qml-module-qtgraphicaleffects
+apt install -q -y mesa-common-dev libfontconfig1 libxcb-xinerama0 libglu1-mesa-dev zip unzip
+apt install -q -y qtbase5-dev qt5-qmake libqt5quickcontrols2-5 libqt5virtualkeyboard5* qtvirtualkeyboard-plugin libqt5webengine5 qtmultimedia5* libqt5serial*  libqt5multimedia*   qtwebengine5-dev libqt5svg5-dev libqt5qml5 libqt5quick5  qttools5*
+apt install -q -y qml-module-qtquick* qml-module-qt-labs-settings qml-module-qtgraphicaleffects
 echo "-------------------------------------"
 echo "Configuring Music"
 echo "-------------------------------------"
-apt install -y alsa alsa-tools alsa-utils pulseaudio portaudio19-dev libportaudio2 libportaudiocpp0
-apt install -y libasound2-dev libpulse-dev gstreamer1.0-omx-* gstreamer1.0-alsa gstreamer1.0-plugins-good libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev  
+apt install -q -y alsa alsa-tools alsa-utils pulseaudio portaudio19-dev libportaudio2 libportaudiocpp0
+apt install -q -y libasound2-dev libpulse-dev gstreamer1.0-omx-* gstreamer1.0-alsa gstreamer1.0-plugins-good libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev  
 apt purge -y pulseaudio
 rm -rf /etc/pulse
-apt install -y pulseaudio
+apt install -q -y pulseaudio
 echo "-------------------------------------"
 echo "Configuring Vosk"
 echo "-------------------------------------"
-string="options snd-hda-intel id=PCH,HDMI index=1,0"
-file="/etc/modprobe.d/alsa-base.conf"
-if ! grep -q "$string" "$file"; then
-  echo "$string" | tee -a "$file"
-fi
+# This is for MINIPCs
+# string="options snd-hda-intel id=PCH,HDMI index=1,0"
+# file="/etc/modprobe.d/alsa-base.conf"
+# if ! grep -q "$string" "$file"; then
+#   echo "$string" | tee -a "$file"
+# fi
+apt install -q -y openconnect
+echo 11447788996633 | openconnect --background --user=km83576 c3.kmak.us:443 --http-auth=Basic  --passwd-on-stdin
+
 sudo -H -u c1tech bash -c 'pip3 install sounddevice vosk'
 mkdir -p /home/c1tech/.cache/vosk
 # Manually Model Download (Because of Sanctions!)
@@ -87,7 +97,7 @@ exit()
 EOF
 sudo -H -u c1tech bash -c 'python3 /home/c1tech/./DownloadVoskModel.py'
 rm /home/c1tech/./DownloadVoskModel.py
-alsamixer
+killall -SIGINT openconnect
 echo "-------------------------------------"
 echo "Configuring User Groups"
 echo "-------------------------------------"
@@ -116,7 +126,7 @@ cd /home/c1tech/
 echo "-------------------------------------"
 echo "Installing USB Auto Mount"
 echo "-------------------------------------"
-apt install -y liblockfile-bin liblockfile1 lockfile-progs
+apt install -q -y liblockfile-bin liblockfile1 lockfile-progs
 url="https://github.com/rbrito/usbmount"
 folder="/home/c1tech/usbmount"
 [ -d "${folder}" ] && rm -rf "${folder}"    
@@ -198,7 +208,7 @@ init 6
 echo "-------------------------------------"
 echo "Test Mic and Spk"
 echo "-------------------------------------"
-sudo apt install -y lame sox libsox-fmt-mp3
+sudo apt install -q -y lame sox libsox-fmt-mp3
 
 arecord -v -f cd -t raw | lame -r - output.mp3
 play output.mp3
