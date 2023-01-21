@@ -30,6 +30,12 @@ timedatectl set-timezone Asia/Tehran
 echo "-------------------------------------"
 echo "Installing Pre-Requirements"
 echo "-------------------------------------"
+# mv /etc/apt/sources.list.d/ .
+
+
+# mirror.kumi.systems
+# http://mirror.kumi.systems/ubuntu-ports/
+
 # string="ir.archive.ubuntu.com"
 # file="/etc/apt/sources.list"
 # if ! grep -q "$string" "$file"; then
@@ -42,62 +48,70 @@ echo "-------------------------------------"
 # EOF
 # fi
 # sh -c "echo 'deb [trusted=yes] https://ubuntu.iranrepo.ir jammy main restricted universe multiverse' >> /etc/apt/sources.list"
-# sudo systemctl stop systemd-resolved.service
-# mv /etc/resolv.conf /etc/resolv.conf.backup
-# cat << EOF > /etc/resolv.conf
-# nameserver 185.51.200.2
-# nameserver 178.22.122.100
-# # nameserver 185.55.226.26
-# # nameserver 185.55.225.25
-# EOF
+sudo systemctl stop systemd-resolved.service
+mv /etc/resolv.conf /etc/resolv.conf.backup
+cat << EOF > /etc/resolv.conf
+nameserver 185.51.200.2
+nameserver 178.22.122.100
+# nameserver 185.55.226.26
+# nameserver 185.55.225.25
+EOF
 
 export DEBIAN_FRONTEND=noninteractive
 apt update && apt upgrade -q -y
-apt install -q -y software-properties-common git avahi-daemon python3-pip nano
-apt install -q -y debhelper build-essential gcc g++ gdb cmake 
+apt install -q -y software-properties-common git avahi-daemon python3-pip nano lame sox libsox-fmt-mp3 curl zip unzip atop bmon
+apt install -q -y debhelper build-essential gcc g++ gdb cmake
 echo "-------------------------------------"
 echo "Installing Qt & Tools"
 echo "-------------------------------------"
-apt install -q -y mesa-common-dev libfontconfig1 libxcb-xinerama0 libglu1-mesa-dev zip unzip
-apt install -q -y qtbase5-dev qt5-qmake libqt5quickcontrols2-5 libqt5virtualkeyboard5* qtvirtualkeyboard-plugin libqt5webengine5 qtmultimedia5* libqt5serial*  libqt5multimedia*   qtwebengine5-dev libqt5svg5-dev libqt5qml5 libqt5quick5  qttools5*
-apt install -q -y qml-module-qtquick* qml-module-qt-labs-settings qml-module-qtgraphicaleffects
+apt install -q -y mesa-common-dev libfontconfig1 libxcb-xinerama0 libglu1-mesa-dev 
+# qtwebengine5-dev
+# apt install -q -y qtvirtualkeyboard-plugin libqt5virtualkeyboard5 libqt5virtualkeyboard5-dev qtmultimedia5-dev libqt5serialbus5 libqt5serialbus5-bin libqt5serialbus5-dev libqt5serialbus5-plugins libqt5serialport5 libqt5serialport5-dev libqt5multimedia5 libqt5multimedia5-plugins libqt5multimediagsttools5 libqt5multimediaquick5 libqt5multimediawidgets5 libqt5svg5-dev libqt5qml5 libqt5quick5 qttools5-dev qttools5-dev-tools
+# qml-module-qtwebengine qml-module-qtwebview
+apt install -q -y qt5*
+apt install -q -y libqt5*
+apt install -q -y qml-module*
 echo "-------------------------------------"
 echo "Configuring Music"
 echo "-------------------------------------"
-apt install -q -y alsa alsa-tools alsa-utils pulseaudio portaudio19-dev libportaudio2 libportaudiocpp0
+apt install -q -y alsa alsa-tools alsa-utils portaudio19-dev libportaudio2 libportaudiocpp0 pulseaudio
 apt install -q -y libasound2-dev libpulse-dev gstreamer1.0-omx-* gstreamer1.0-alsa gstreamer1.0-plugins-good libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev  
-apt purge -y pulseaudio
-rm -rf /etc/pulse
-apt install -q -y pulseaudio
+# apt purge -y pulseaudio
+# rm -rf /etc/pulse
+# apt install -q -y pulseaudio
 echo "-------------------------------------"
 echo "Configuring Vosk"
 echo "-------------------------------------"
 # This is for MINIPCs
-# string="options snd-hda-intel id=PCH,HDMI index=1,0"
-# file="/etc/modprobe.d/alsa-base.conf"
-# if ! grep -q "$string" "$file"; then
-#   echo "$string" | tee -a "$file"
-# fi
-apt install -q -y openconnect
-echo 11447788996633 | openconnect --background --user=km83576 c3.kmak.us:443 --http-auth=Basic  --passwd-on-stdin
-
-sudo -H -u c1tech bash -c 'pip3 install sounddevice vosk'
-mkdir -p /home/c1tech/.cache/vosk
-# Manually Model Download (Because of Sanctions!)
-# if [ ! -f /home/c1tech/.cache/vosk/vosk-model-small-fa-0.5.zip]
-# then
-#   wget https://raw.githubusercontent.com/Hamid-Najafi/C1-Control-Panel/main/vosk-model-small-fa-0.5.zip -P /home/c1tech/.cache/vosk
-#   unzip /home/c1tech/.cache/vosk/vosk-model-small-fa-0.5.zip -d /home/c1tech/.cache/vosk
-# fi
-# Vosk Model Download
-cat >> /home/c1tech/./DownloadVoskModel.py << EOF
-from vosk import Model
-model = Model(model_name="vosk-model-small-fa-0.5")
-exit()
+string="options snd-hda-intel id=PCH,HDMI index=1,0"
+file="/etc/modprobe.d/alsa-base.conf"
+if ! grep -q "$string" "$file"; then
+  echo "$string" | tee -a "$file"
+fi
+mkdir /home/c1tech/.pip
+cat >> /home/c1tech/.pip/pip.conf<< EOF
+[global]
+index-url = https://pypi.iranrepo.ir/simple
 EOF
-sudo -H -u c1tech bash -c 'python3 /home/c1tech/./DownloadVoskModel.py'
-rm /home/c1tech/./DownloadVoskModel.py
-killall -SIGINT openconnect
+sudo -H -u c1tech bash -c 'pip3 install sounddevice vosk'
+
+mkdir -p /home/c1tech/.cache/vosk
+chown -R c1tech:c1tech /home/c1tech/.cache/vosk
+# Manually Model Download (Because of Sanctions!)
+if [ ! -f /home/c1tech/.cache/vosk/vosk-model-small-fa-0.5.zip]
+then
+  wget https://raw.githubusercontent.com/Hamid-Najafi/C1-Control-Panel/main/vosk-model-small-fa-0.5.zip -P /home/c1tech/.cache/vosk
+  unzip /home/c1tech/.cache/vosk/vosk-model-small-fa-0.5.zip -d /home/c1tech/.cache/vosk
+fi
+
+# Vosk Model Download
+# cat >> /home/c1tech/./DownloadVoskModel.py << EOF
+# from vosk import Model
+# model = Model(model_name="vosk-model-small-fa-0.5")
+# exit()
+# EOF
+# sudo -H -u c1tech bash -c 'python3 /home/c1tech/./DownloadVoskModel.py'
+# rm /home/c1tech/./DownloadVoskModel.py
 echo "-------------------------------------"
 echo "Configuring User Groups"
 echo "-------------------------------------"
@@ -113,7 +127,7 @@ url="https://github.com/pjsip/pjproject.git"
 folder="/home/c1tech/pjproject"
 [ -d "${folder}" ] && rm -rf "${folder}"    
 git clone "${url}" "${folder}"
-cd pjproject
+cd /home/c1tech/pjproject
 ./configure --prefix=/usr --enable-shared
 make dep -j4 
 make -j4
@@ -123,6 +137,10 @@ ldconfig
 # Verify that pjproject has been installed in the target location
 ldconfig -p | grep pj
 cd /home/c1tech/
+# IF COMPILING ON ARM64:
+# sudo nano /usr/include/pj/config.h
+#   define PJ_IS_LITTLE_ENDIAN  1
+#   define PJ_IS_BIG_ENDIAN     0
 echo "-------------------------------------"
 echo "Installing USB Auto Mount"
 echo "-------------------------------------"
@@ -161,14 +179,18 @@ loginctl enable-linger c1tech
 mkdir -p /home/c1tech/.config/systemd/user
 mkdir -p /home/c1tech/.config/systemd/user/default.target.wants/
 chown -R c1tech:c1tech /home/c1tech/.config/systemd/
+export "XDG_RUNTIME_DIR=/run/user/$UID"
+export "DBUS_SESSION_BUS_ADDRESS=unix:path=$XDG_RUNTIME_DIR/bus"
 
 cat > /home/c1tech/.config/systemd/user/orcp.service << "EOF"
 [Unit]
 Description=C1Tech Operating Room Control Panel V2.0
 
 [Service]
-# Environment="XDG_RUNTIME_DIR=/run/user/1000"
-# Environment="DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus"
+Environment="XDG_RUNTIME_DIR=/run/user/1000"
+Environment="DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus"
+Environment="QT_QPA_EGLFS_ALWAYS_SET_MODE=1"
+Environment="QT_QPA_EGLFS_HIDECURSOR=1"
 ExecStartPre=amixer sset 'Capture' 85% && amixer sset 'Master' 100%
 ExecStart=/home/c1tech/C1-Control-Panel/Panel/panel -platform eglfs
 Restart=always
@@ -177,6 +199,8 @@ Restart=always
 WantedBy=default.target
 EOF
 runuser -l c1tech -c 'export XDG_RUNTIME_DIR=/run/user/$UID && export DBUS_SESSION_BUS_ADDRESS=unix:path=$XDG_RUNTIME_DIR/bus && systemctl --user daemon-reload && systemctl --user enable orcp'
+# systemctl --user daemon-reload
+# systemctl --user enable orcp --now
 # systemctl --user status orcp
 # systemctl --user restart orcp
 # journalctl --user --unit orcp --follow
