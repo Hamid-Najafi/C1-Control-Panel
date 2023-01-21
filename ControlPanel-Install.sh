@@ -32,13 +32,13 @@ echo "Installing Pre-Requirements"
 echo "-------------------------------------"
 string="http://ir.archive.ubuntu.com/ubuntu"
 file="/etc/apt/sources.list"
-if ! grep -q "$string" "$file"; then
+if grep -q "$string" "$file"; then
   echo "Replacing APT Sources File"
   mv /etc/apt/sources.list{,.backup}
   wget https://raw.githubusercontent.com/Hamid-Najafi/DevOps-Notebook/master/Apps/Apt/amd64-sources.list -O /etc/apt/sources.list
 fi
 string="http://archive.ubuntu.com/ubuntu"
-if ! grep -q "$string" "$file"; then
+if grep -q "$string" "$file"; then
   echo "Replacing APT Sources File"
   mv /etc/apt/sources.list{,.backup}
   wget https://raw.githubusercontent.com/Hamid-Najafi/DevOps-Notebook/master/Apps/Apt/amd64-sources.list -O /etc/apt/sources.list
@@ -79,11 +79,16 @@ if ! grep -q "$string" "$file"; then
   echo "Setting ALSA Device Priority"
   echo "$string" | tee -a "$file"
 fi
+
+if [ ! -d /home/c1tech/.pip ]
+then
 mkdir /home/c1tech/.pip
-cat >> /home/c1tech/.pip/pip.conf<< EOF
+cat >> /home/c1tech/.pip/pip.conf << EOF
 [global]
 index-url = https://pypi.iranrepo.ir/simple
 EOF
+fi
+
 sudo -H -u c1tech bash -c 'pip3 install sounddevice vosk'
 
 mkdir -p /home/c1tech/.cache/vosk
