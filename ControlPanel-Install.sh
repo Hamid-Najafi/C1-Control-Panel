@@ -33,11 +33,13 @@ echo "-------------------------------------"
 string="http://ir.archive.ubuntu.com/ubuntu"
 file="/etc/apt/sources.list"
 if ! grep -q "$string" "$file"; then
+  echo "Replacing APT Sources File"
   mv /etc/apt/sources.list{,.backup}
   wget https://raw.githubusercontent.com/Hamid-Najafi/DevOps-Notebook/master/Apps/Apt/amd64-sources.list -O /etc/apt/sources.list
 fi
 string="http://archive.ubuntu.com/ubuntu"
 if ! grep -q "$string" "$file"; then
+  echo "Replacing APT Sources File"
   mv /etc/apt/sources.list{,.backup}
   wget https://raw.githubusercontent.com/Hamid-Najafi/DevOps-Notebook/master/Apps/Apt/amd64-sources.list -O /etc/apt/sources.list
 fi
@@ -52,8 +54,11 @@ apt install -q -y mesa-common-dev libfontconfig1 libxcb-xinerama0 libglu1-mesa-d
 # qtwebengine5-dev
 # apt install -q -y qtvirtualkeyboard-plugin libqt5virtualkeyboard5 libqt5virtualkeyboard5-dev qtmultimedia5-dev libqt5serialbus5 libqt5serialbus5-bin libqt5serialbus5-dev libqt5serialbus5-plugins libqt5serialport5 libqt5serialport5-dev libqt5multimedia5 libqt5multimedia5-plugins libqt5multimediagsttools5 libqt5multimediaquick5 libqt5multimediawidgets5 libqt5svg5-dev libqt5qml5 libqt5quick5 qttools5-dev qttools5-dev-tools
 # qml-module-qtwebengine qml-module-qtwebview
+# qtvirtualkeyboard-plugin
 apt install -q -y qt5*
-apt install -q -y libqt5*
+apt install -q -y qtbase5* qttools5* qtmultimedia5* qtwebengine5*
+# apt install -q -y libqt5*
+libqt5quickcontrols2-5 libqt5virtualkeyboard5* libqt5webengine5 libqt5serial* libqt5svg5-dev libqt5qml5 libqt5quick5 libqt5multimedia*
 apt install -q -y qml-module*
 echo "-------------------------------------"
 echo "Configuring Music"
@@ -70,6 +75,7 @@ echo "-------------------------------------"
 string="options snd-hda-intel id=PCH,HDMI index=1,0"
 file="/etc/modprobe.d/alsa-base.conf"
 if ! grep -q "$string" "$file"; then
+  echo "Setting ALSA Device Priority"
   echo "$string" | tee -a "$file"
 fi
 mkdir /home/c1tech/.pip
