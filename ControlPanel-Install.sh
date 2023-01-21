@@ -30,33 +30,6 @@ timedatectl set-timezone Asia/Tehran
 echo "-------------------------------------"
 echo "Installing Pre-Requirements"
 echo "-------------------------------------"
-# mv /etc/apt/sources.list.d/ .
-
-
-# mirror.kumi.systems
-# http://mirror.kumi.systems/ubuntu-ports/
-
-# string="ir.archive.ubuntu.com"
-# file="/etc/apt/sources.list"
-# if ! grep -q "$string" "$file"; then
-# mv /etc/apt/sources.list{,.bakup}
-# cat > /etc/apt/sources.list << "EOF"
-# deb http://ir.archive.ubuntu.com/ubuntu jammy main restricted universe multiverse
-# deb http://ir.archive.ubuntu.com/ubuntu jammy-updates main restricted universe multiverse
-# deb http://ir.archive.ubuntu.com/ubuntu jammy-backports main restricted universe multiverse
-# deb http://ir.archive.ubuntu.com/ubuntu jammy-security main restricted universe multiverse
-# EOF
-# fi
-# sh -c "echo 'deb [trusted=yes] https://ubuntu.iranrepo.ir jammy main restricted universe multiverse' >> /etc/apt/sources.list"
-sudo systemctl stop systemd-resolved.service
-mv /etc/resolv.conf /etc/resolv.conf.backup
-cat << EOF > /etc/resolv.conf
-nameserver 185.51.200.2
-nameserver 178.22.122.100
-# nameserver 185.55.226.26
-# nameserver 185.55.225.25
-EOF
-
 export DEBIAN_FRONTEND=noninteractive
 apt update && apt upgrade -q -y
 apt install -q -y software-properties-common git avahi-daemon python3-pip nano lame sox libsox-fmt-mp3 curl zip unzip atop bmon
