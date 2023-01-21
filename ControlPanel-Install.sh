@@ -55,8 +55,9 @@ apt install -q -y mesa-common-dev libfontconfig1 libxcb-xinerama0 libglu1-mesa-d
 # apt install -q -y qtvirtualkeyboard-plugin libqt5virtualkeyboard5 libqt5virtualkeyboard5-dev qtmultimedia5-dev libqt5serialbus5 libqt5serialbus5-bin libqt5serialbus5-dev libqt5serialbus5-plugins libqt5serialport5 libqt5serialport5-dev libqt5multimedia5 libqt5multimedia5-plugins libqt5multimediagsttools5 libqt5multimediaquick5 libqt5multimediawidgets5 libqt5svg5-dev libqt5qml5 libqt5quick5 qttools5-dev qttools5-dev-tools
 # qml-module-qtwebengine qml-module-qtwebview
 # qtvirtualkeyboard-plugin
-apt install -q -y qt5*
-apt install -q -y qtbase5* qttools5* qtmultimedia5* qtwebengine5*
+apt install -q -y qt5* qttools5* qtmultimedia5* qtwebengine5*
+# apt install -q -y qtbase5* 
+sudo apt install -q -y qtbase5-dev qtbase5-dev-tools qtbase5-doc qtbase5-doc-dev qtbase5-doc-html qtbase5-examples qtbase5-private-dev
 # apt install -q -y libqt5*
 apt install -q -y libqt5quickcontrols2-5 libqt5virtualkeyboard5* libqt5webengine5 libqt5serial* libqt5svg5-dev libqt5qml5 libqt5quick5 libqt5multimedia*
 apt install -q -y qml-module*
