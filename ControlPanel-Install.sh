@@ -30,6 +30,17 @@ timedatectl set-timezone Asia/Tehran
 echo "-------------------------------------"
 echo "Installing Pre-Requirements"
 echo "-------------------------------------"
+string="http://ir.archive.ubuntu.com/ubuntu"
+file="/etc/apt/sources.list"
+if ! grep -q "$string" "$file"; then
+  mv /etc/apt/sources.list{,.backup}
+  wget https://raw.githubusercontent.com/Hamid-Najafi/DevOps-Notebook/master/Apps/Apt/amd64-sources.list -O /etc/apt/sources.list
+fi
+string="http://archive.ubuntu.com/ubuntu"
+if ! grep -q "$string" "$file"; then
+  mv /etc/apt/sources.list{,.backup}
+  wget https://raw.githubusercontent.com/Hamid-Najafi/DevOps-Notebook/master/Apps/Apt/amd64-sources.list -O /etc/apt/sources.list
+fi
 export DEBIAN_FRONTEND=noninteractive
 apt update && apt upgrade -q -y
 apt install -q -y software-properties-common git avahi-daemon python3-pip nano lame sox libsox-fmt-mp3 curl zip unzip atop bmon
