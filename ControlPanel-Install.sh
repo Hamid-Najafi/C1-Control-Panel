@@ -58,7 +58,7 @@ apt install -q -y mesa-common-dev libfontconfig1 libxcb-xinerama0 libglu1-mesa-d
 apt install -q -y qt5*
 apt install -q -y qtbase5* qttools5* qtmultimedia5* qtwebengine5*
 # apt install -q -y libqt5*
-libqt5quickcontrols2-5 libqt5virtualkeyboard5* libqt5webengine5 libqt5serial* libqt5svg5-dev libqt5qml5 libqt5quick5 libqt5multimedia*
+apt install -q -y libqt5quickcontrols2-5 libqt5virtualkeyboard5* libqt5webengine5 libqt5serial* libqt5svg5-dev libqt5qml5 libqt5quick5 libqt5multimedia*
 apt install -q -y qml-module*
 echo "-------------------------------------"
 echo "Configuring Music"
