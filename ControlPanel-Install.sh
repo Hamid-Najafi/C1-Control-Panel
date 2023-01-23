@@ -36,12 +36,14 @@ if grep -q "$string" "$file"; then
   echo "Replacing APT Sources File"
   mv /etc/apt/sources.list{,.backup}
   wget https://raw.githubusercontent.com/Hamid-Najafi/DevOps-Notebook/master/Apps/Apt/amd64-sources.list -O /etc/apt/sources.list
+  # wget https://raw.githubusercontent.com/Hamid-Najafi/DevOps-Notebook/master/Apps/Apt/arm64-sources.list -O /etc/apt/sources.list
 fi
 string="http://archive.ubuntu.com/ubuntu"
 if grep -q "$string" "$file"; then
   echo "Replacing APT Sources File"
   mv /etc/apt/sources.list{,.backup}
   wget https://raw.githubusercontent.com/Hamid-Najafi/DevOps-Notebook/master/Apps/Apt/amd64-sources.list -O /etc/apt/sources.list
+  # wget https://raw.githubusercontent.com/Hamid-Najafi/DevOps-Notebook/master/Apps/Apt/arm64-sources.list -O /etc/apt/sources.list
 fi
 export DEBIAN_FRONTEND=noninteractive
 apt update && apt upgrade -q -y
@@ -54,8 +56,7 @@ apt install -q -y mesa-common-dev libfontconfig1 libxcb-xinerama0 libglu1-mesa-d
 # qtwebengine5-dev
 # apt install -q -y qtvirtualkeyboard-plugin libqt5virtualkeyboard5 libqt5virtualkeyboard5-dev qtmultimedia5-dev libqt5serialbus5 libqt5serialbus5-bin libqt5serialbus5-dev libqt5serialbus5-plugins libqt5serialport5 libqt5serialport5-dev libqt5multimedia5 libqt5multimedia5-plugins libqt5multimediagsttools5 libqt5multimediaquick5 libqt5multimediawidgets5 libqt5svg5-dev libqt5qml5 libqt5quick5 qttools5-dev qttools5-dev-tools
 # qml-module-qtwebengine qml-module-qtwebview
-# qtvirtualkeyboard-plugin
-apt install -q -y qt5* qttools5* qtmultimedia5* qtwebengine5*
+apt install -q -y qt5* qttools5* qtmultimedia5* qtwebengine5* qtvirtualkeyboard* qtdeclarative* qt3d*
 # apt install -q -y qtbase5* 
 sudo apt install -q -y qtbase5-dev qtbase5-dev-tools qtbase5-doc qtbase5-doc-dev qtbase5-doc-html qtbase5-examples qtbase5-private-dev
 # apt install -q -y libqt5*
@@ -66,8 +67,8 @@ echo "Configuring Music"
 echo "-------------------------------------"
 apt install -q -y alsa alsa-tools alsa-utils portaudio19-dev libportaudio2 libportaudiocpp0 pulseaudio
 apt install -q -y libasound2-dev libpulse-dev gstreamer1.0-omx-* gstreamer1.0-alsa gstreamer1.0-plugins-good libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev  
-# apt purge -y pulseaudio
-# rm -rf /etc/pulse
+apt purge -y pulseaudio
+rm -rf /etc/pulse
 # apt install -q -y pulseaudio
 echo "-------------------------------------"
 echo "Configuring Vosk"
@@ -83,13 +84,15 @@ fi
 if [ ! -d /home/c1tech/.pip ]
 then
 mkdir /home/c1tech/.pip
+chown c1tech:c1tech /home/c1tech/.pip
 cat >> /home/c1tech/.pip/pip.conf << EOF
 [global]
 index-url = https://pypi.iranrepo.ir/simple
 EOF
 fi
 
-sudo -H -u c1tech bash -c 'pip3 install sounddevice vosk'
+sudo -H -u c1tech bash -c 'pip3 install sounddevice vosk shadowsocksr-cli'
+sudo -H -u c1tech bash -c 'shadowsocksr-cli --add-ssr ssr://MTU5LjY5LjE4LjE5ODo4Mzg4Om9yaWdpbjphZXMtMjU2LWNmYjpodHRwX3Bvc3Q6VTJoaFpHOTNjR0Z6Y3k0eU5BLz9yZW1hcmtzPSZwcm90b3BhcmFtPSZvYmZzcGFyYW09'
 
 mkdir -p /home/c1tech/.cache/vosk
 chown -R c1tech:c1tech /home/c1tech/.cache/vosk
@@ -98,6 +101,7 @@ if [ ! -f /home/c1tech/.cache/vosk/vosk-model-small-fa-0.5.zip]
 then
   wget https://raw.githubusercontent.com/Hamid-Najafi/C1-Control-Panel/main/vosk-model-small-fa-0.5.zip -P /home/c1tech/.cache/vosk
   unzip /home/c1tech/.cache/vosk/vosk-model-small-fa-0.5.zip -d /home/c1tech/.cache/vosk
+  rm /home/c1tech/.cache/vosk/vosk-model-small-fa-0.5.zip
 fi
 
 # Vosk Model Download
@@ -172,9 +176,8 @@ echo "-------------------------------------"
 journalctl --vacuum-time=60d
 loginctl enable-linger c1tech
 
-mkdir -p /home/c1tech/.config/systemd/user
 mkdir -p /home/c1tech/.config/systemd/user/default.target.wants/
-chown -R c1tech:c1tech /home/c1tech/.config/systemd/
+chown -R c1tech:c1tech /home/c1tech/.config
 export "XDG_RUNTIME_DIR=/run/user/$UID"
 export "DBUS_SESSION_BUS_ADDRESS=unix:path=$XDG_RUNTIME_DIR/bus"
 
@@ -222,6 +225,7 @@ echo "-------------------------------------"
 echo "Done, Performing System Reboot"
 echo "-------------------------------------"
 # Give c1tech Reboot Permision, CAUTION: This will break user connection to systemctl!
+apt autoremove -y -q
 chown root:c1tech /bin/systemctl
 chmod 4755 /bin/systemctl
 init 6
