@@ -13,6 +13,11 @@
 # wget https://b2n.ir/g03701 -O CP-Install.sh && chmod +x CP-Install.sh && sudo ./CP-Install.sh
 # -------==========-------
 echo "-------------------------------------"
+echo "Create Account"
+echo "-------------------------------------"
+# adduser c1tech
+# usermod -aG sudo c1tech
+echo "-------------------------------------"
 echo "Setting Hostname"
 echo "-------------------------------------"
 echo "Set New Hostname: (ORCP-Floor-Room)"
@@ -35,14 +40,21 @@ file="/etc/apt/sources.list"
 if grep -q "$string" "$file"; then
   echo "Replacing APT Sources File"
   mv /etc/apt/sources.list{,.backup}
-  wget https://raw.githubusercontent.com/Hamid-Najafi/DevOps-Notebook/master/Apps/Apt/amd64-sources.list -O /etc/apt/sources.list
+  sh -c "echo 'deb [trusted=yes] https://debian.iranrepo.ir bullseye main' >> /etc/apt/sources.list"
+  # sh -c "echo 'deb [trusted=yes] https://debian.iranrepo.ir jammy main' >> /etc/apt/sources.list"
+  sudo apt-key adv --keyserver debian.iranrepo.ir --recv-keys  648ACFD622F3D138
+  sudo apt-key adv --keyserver debian.iranrepo.ir --recv-keys  0E98404D386FA1D9
+  sudo apt-key adv --keyserver debian.iranrepo.ir --recv-keys  605C66F00D6C9793
+  # wget https://raw.githubusercontent.com/Hamid-Najafi/DevOps-Notebook/master/Apps/Apt/amd64-sources.list -O /etc/apt/sources.list
   # wget https://raw.githubusercontent.com/Hamid-Najafi/DevOps-Notebook/master/Apps/Apt/arm64-sources.list -O /etc/apt/sources.list
 fi
 string="http://archive.ubuntu.com/ubuntu"
 if grep -q "$string" "$file"; then
   echo "Replacing APT Sources File"
   mv /etc/apt/sources.list{,.backup}
-  wget https://raw.githubusercontent.com/Hamid-Najafi/DevOps-Notebook/master/Apps/Apt/amd64-sources.list -O /etc/apt/sources.list
+  sh -c "echo 'deb [trusted=yes] https://debian.iranrepo.ir bullseye main' >> /etc/apt/sources.list"
+  # sh -c "echo 'deb [trusted=yes] https://debian.iranrepo.ir jammy main' >> /etc/apt/sources.list"
+  # wget https://raw.githubusercontent.com/Hamid-Najafi/DevOps-Notebook/master/Apps/Apt/amd64-sources.list -O /etc/apt/sources.list
   # wget https://raw.githubusercontent.com/Hamid-Najafi/DevOps-Notebook/master/Apps/Apt/arm64-sources.list -O /etc/apt/sources.list
 fi
 export DEBIAN_FRONTEND=noninteractive
@@ -69,7 +81,7 @@ apt install -q -y alsa alsa-tools alsa-utils portaudio19-dev libportaudio2 libpo
 apt install -q -y libasound2-dev libpulse-dev gstreamer1.0-omx-* gstreamer1.0-alsa gstreamer1.0-plugins-good libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev  
 apt purge -y pulseaudio
 rm -rf /etc/pulse
-# apt install -q -y pulseaudio
+apt install -q -y pulseaudio
 echo "-------------------------------------"
 echo "Configuring Vosk"
 echo "-------------------------------------"
@@ -80,6 +92,15 @@ if ! grep -q "$string" "$file"; then
   echo "Setting ALSA Device Priority"
   echo "$string" | tee -a "$file"
 fi
+
+# List sound cards
+# cat /proc/asound/cards
+
+# Set default sound cards
+cat >> /etc/asound.conf << EOF
+defaults.pcm.card 3
+defaults.ctl.card 3
+EOF
 
 if [ ! -d /home/c1tech/.pip ]
 then
@@ -93,9 +114,15 @@ fi
 
 sudo -H -u c1tech bash -c 'pip3 install sounddevice vosk shadowsocksr-cli'
 sudo -H -u c1tech bash -c 'shadowsocksr-cli --add-ssr ssr://MTU5LjY5LjE4LjE5ODo4Mzg4Om9yaWdpbjphZXMtMjU2LWNmYjpodHRwX3Bvc3Q6VTJoaFpHOTNjR0Z6Y3k0eU5BLz9yZW1hcmtzPSZwcm90b3BhcmFtPSZvYmZzcGFyYW09'
+shadowsocksr-cli --add-ssr ssr://MTU5LjY5LjE4LjE5ODo4Mzg4Om9yaWdpbjphZXMtMjU2LWNmYjpodHRwX3Bvc3Q6VTJoaFpHOTNjR0Z6Y3k0eU5BLz9yZW1hcmtzPSZwcm90b3BhcmFtPSZvYmZzcGFyYW09
+
+shadowsocksr-cli -l
+shadowsocksr-cli -s 2
+export ALL_PROXY=socks5://127.0.0.1:1080
+
 
 mkdir -p /home/c1tech/.cache/vosk
-chown -R c1tech:c1tech /home/c1tech/.cache/vosk
+chown -R c1tech:c1tech /home/c1tech
 # Manually Model Download (Because of Sanctions!)
 if [ ! -f /home/c1tech/.cache/vosk/vosk-model-small-fa-0.5.zip]
 then
@@ -186,8 +213,8 @@ cat > /home/c1tech/.config/systemd/user/orcp.service << "EOF"
 Description=C1Tech Operating Room Control Panel V2.0
 
 [Service]
-Environment="XDG_RUNTIME_DIR=/run/user/1000"
-Environment="DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus"
+Environment="XDG_RUNTIME_DIR=/run/user/$UID"
+Environment="DBUS_SESSION_BUS_ADDRESS=unix:path=$XDG_RUNTIME_DIR/bus"
 Environment="QT_QPA_EGLFS_ALWAYS_SET_MODE=1"
 Environment="QT_QPA_EGLFS_HIDECURSOR=1"
 ExecStartPre=amixer sset 'Capture' 85% && amixer sset 'Master' 100%
