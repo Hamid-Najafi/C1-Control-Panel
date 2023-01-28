@@ -75,13 +75,35 @@ sudo apt install -q -y qtbase5-dev qtbase5-dev-tools qtbase5-doc qtbase5-doc-dev
 apt install -q -y libqt5quickcontrols2-5 libqt5virtualkeyboard5* libqt5webengine5 libqt5serial* libqt5svg5-dev libqt5qml5 libqt5quick5 libqt5multimedia*
 apt install -q -y qml-module*
 echo "-------------------------------------"
-echo "Configuring Music"
+echo "Configuring Speaker"
 echo "-------------------------------------"
 apt install -q -y alsa alsa-tools alsa-utils portaudio19-dev libportaudio2 libportaudiocpp0 pulseaudio
 apt install -q -y libasound2-dev libpulse-dev gstreamer1.0-omx-* gstreamer1.0-alsa gstreamer1.0-plugins-good libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev  
 apt purge -y pulseaudio
 rm -rf /etc/pulse
 apt install -q -y pulseaudio
+
+# #**** BOYA BY-MC2 ****
+# c1tech@orcp:~$ aplay -l
+# **** List of PLAYBACK Hardware Devices ****
+# .....
+# card 1: Device [PDP Audio Device], device 0: USB Audio [USB Audio]
+#   Subdevices: 0/1
+#   Subdevice #0: subdevice #0
+
+# #**** List sound cards ****
+# cat /proc/asound/cards
+
+# #**** Set default sound cards ****
+# cat >> /etc/asound.conf << EOF
+# defaults.pcm.card 3
+# defaults.ctl.card 3
+# EOF
+
+# amixer -c 1 scontrols
+
+amixer -c 1 sset 'Speaker' 68 && amixer -c 1 sset 'Mic' 68
+
 echo "-------------------------------------"
 echo "Configuring Vosk"
 echo "-------------------------------------"
@@ -92,15 +114,6 @@ if ! grep -q "$string" "$file"; then
   echo "Setting ALSA Device Priority"
   echo "$string" | tee -a "$file"
 fi
-
-# List sound cards
-# cat /proc/asound/cards
-
-# Set default sound cards
-cat >> /etc/asound.conf << EOF
-defaults.pcm.card 3
-defaults.ctl.card 3
-EOF
 
 if [ ! -d /home/c1tech/.pip ]
 then
@@ -113,12 +126,11 @@ EOF
 fi
 
 sudo -H -u c1tech bash -c 'pip3 install sounddevice vosk shadowsocksr-cli'
-sudo -H -u c1tech bash -c 'shadowsocksr-cli --add-ssr ssr://MTU5LjY5LjE4LjE5ODo4Mzg4Om9yaWdpbjphZXMtMjU2LWNmYjpodHRwX3Bvc3Q6VTJoaFpHOTNjR0Z6Y3k0eU5BLz9yZW1hcmtzPSZwcm90b3BhcmFtPSZvYmZzcGFyYW09'
-shadowsocksr-cli --add-ssr ssr://MTU5LjY5LjE4LjE5ODo4Mzg4Om9yaWdpbjphZXMtMjU2LWNmYjpodHRwX3Bvc3Q6VTJoaFpHOTNjR0Z6Y3k0eU5BLz9yZW1hcmtzPSZwcm90b3BhcmFtPSZvYmZzcGFyYW09
 
-shadowsocksr-cli -l
-shadowsocksr-cli -s 2
-export ALL_PROXY=socks5://127.0.0.1:1080
+# shadowsocksr-cli --add-ssr ssr://MTU5LjY5LjE4LjE5ODo4Mzg4Om9yaWdpbjphZXMtMjU2LWNmYjpodHRwX3Bvc3Q6VTJoaFpHOTNjR0Z6Y3k0eU5BLz9yZW1hcmtzPSZwcm90b3BhcmFtPSZvYmZzcGFyYW09
+# shadowsocksr-cli -l
+# shadowsocksr-cli -s 2
+# export ALL_PROXY=socks5://127.0.0.1:1080
 
 
 mkdir -p /home/c1tech/.cache/vosk
@@ -197,6 +209,7 @@ make -j4
 
 chown -R c1tech:c1tech /home/c1tech/C1
 chown -R c1tech:c1tech /home/c1tech/C1-Control-Panel
+chmod +x /home/c1tech/C1/ExecStart.sh
 echo "-------------------------------------"
 echo "Creating Service for Contold Panel Application"
 echo "-------------------------------------"
@@ -217,8 +230,7 @@ Environment="XDG_RUNTIME_DIR=/run/user/$UID"
 Environment="DBUS_SESSION_BUS_ADDRESS=unix:path=$XDG_RUNTIME_DIR/bus"
 Environment="QT_QPA_EGLFS_ALWAYS_SET_MODE=1"
 Environment="QT_QPA_EGLFS_HIDECURSOR=1"
-ExecStartPre=amixer sset 'Capture' 85% && amixer sset 'Master' 100%
-ExecStart=/home/c1tech/C1-Control-Panel/Panel/panel -platform eglfs
+ExecStart=/bin/sh -c '/home/c1tech/C1/ExecStart.sh'
 Restart=always
 
 [Install]
