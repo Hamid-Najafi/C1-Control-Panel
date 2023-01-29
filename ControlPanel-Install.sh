@@ -65,17 +65,12 @@ echo "-------------------------------------"
 echo "Installing Qt & Tools"
 echo "-------------------------------------"
 apt install -q -y mesa-common-dev libfontconfig1 libxcb-xinerama0 libglu1-mesa-dev 
-# qtwebengine5-dev
-# apt install -q -y qtvirtualkeyboard-plugin libqt5virtualkeyboard5 libqt5virtualkeyboard5-dev qtmultimedia5-dev libqt5serialbus5 libqt5serialbus5-bin libqt5serialbus5-dev libqt5serialbus5-plugins libqt5serialport5 libqt5serialport5-dev libqt5multimedia5 libqt5multimedia5-plugins libqt5multimediagsttools5 libqt5multimediaquick5 libqt5multimediawidgets5 libqt5svg5-dev libqt5qml5 libqt5quick5 qttools5-dev qttools5-dev-tools
-# qml-module-qtwebengine qml-module-qtwebview
 apt install -q -y qt5* qttools5* qtmultimedia5* qtwebengine5* qtvirtualkeyboard* qtdeclarative* qt3d*
-# apt install -q -y qtbase5* 
-sudo apt install -q -y qtbase5-dev qtbase5-dev-tools qtbase5-doc qtbase5-doc-dev qtbase5-doc-html qtbase5-examples qtbase5-private-dev
-# apt install -q -y libqt5*
-apt install -q -y libqt5quickcontrols2-5 libqt5virtualkeyboard5* libqt5webengine5 libqt5serial* libqt5svg5-dev libqt5qml5 libqt5quick5 libqt5multimedia*
+apt install -q -y qtbase5* 
+apt install -q -y libqt5*
 apt install -q -y qml-module*
 echo "-------------------------------------"
-echo "Configuring Speaker"
+echo "Configuring Sound & Mic"
 echo "-------------------------------------"
 apt install -q -y alsa alsa-tools alsa-utils portaudio19-dev libportaudio2 libportaudiocpp0 pulseaudio
 apt install -q -y libasound2-dev libpulse-dev gstreamer1.0-omx-* gstreamer1.0-alsa gstreamer1.0-plugins-good libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev  
@@ -100,21 +95,20 @@ apt install -q -y pulseaudio
 # defaults.ctl.card 3
 # EOF
 
+
+# This is for MINIPCs
+# string="options snd-hda-intel id=PCH,HDMI index=1,0"
+# file="/etc/modprobe.d/alsa-base.conf"
+# if ! grep -q "$string" "$file"; then
+#   echo "Setting ALSA Device Priority"
+#   echo "$string" | tee -a "$file"
+# fi
+
 # amixer -c 1 scontrols
-
-amixer -c 1 sset 'Speaker' 68 && amixer -c 1 sset 'Mic' 68
-
+# amixer -c 1 sset 'Speaker' 68 && amixer -c 1 sset 'Mic' 68
 echo "-------------------------------------"
 echo "Configuring Vosk"
 echo "-------------------------------------"
-# This is for MINIPCs
-string="options snd-hda-intel id=PCH,HDMI index=1,0"
-file="/etc/modprobe.d/alsa-base.conf"
-if ! grep -q "$string" "$file"; then
-  echo "Setting ALSA Device Priority"
-  echo "$string" | tee -a "$file"
-fi
-
 if [ ! -d /home/c1tech/.pip ]
 then
 mkdir /home/c1tech/.pip
@@ -126,12 +120,6 @@ EOF
 fi
 
 sudo -H -u c1tech bash -c 'pip3 install sounddevice vosk shadowsocksr-cli'
-
-# shadowsocksr-cli --add-ssr ssr://MTU5LjY5LjE4LjE5ODo4Mzg4Om9yaWdpbjphZXMtMjU2LWNmYjpodHRwX3Bvc3Q6VTJoaFpHOTNjR0Z6Y3k0eU5BLz9yZW1hcmtzPSZwcm90b3BhcmFtPSZvYmZzcGFyYW09
-# shadowsocksr-cli -l
-# shadowsocksr-cli -s 2
-# export ALL_PROXY=socks5://127.0.0.1:1080
-
 
 mkdir -p /home/c1tech/.cache/vosk
 chown -R c1tech:c1tech /home/c1tech
@@ -228,8 +216,9 @@ Description=C1Tech Operating Room Control Panel V2.0
 [Service]
 Environment="XDG_RUNTIME_DIR=/run/user/$UID"
 Environment="DBUS_SESSION_BUS_ADDRESS=unix:path=$XDG_RUNTIME_DIR/bus"
+Environment="QT_QPA_PLATFORM=eglfs"
 Environment="QT_QPA_EGLFS_ALWAYS_SET_MODE=1"
-Environment="QT_QPA_EGLFS_HIDECURSOR=1"
+# Environment="QT_QPA_EGLFS_HIDECURSOR=1"
 ExecStart=/bin/sh -c '/home/c1tech/C1/ExecStart.sh'
 Restart=always
 
@@ -250,7 +239,7 @@ update-grub
 
 apt -y autoremove --purge plymouth
 apt -y install plymouth plymouth-themes
-# By default ubuntu-text is active 
+# By default ubuntu-text is active ÷
 # /usr/share/plymouth/themes/ubuntu-text/ubuntu-text.plymouth
 # We Will use bgrt (which is same as spinner but manufacture logo is enabled) theme with our custom logo
 cp /home/c1tech/C1-Control-Panel/bgrt-c1.png /usr/share/plymouth/themes/spinner/bgrt-fallback.png

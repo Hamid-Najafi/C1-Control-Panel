@@ -29,6 +29,7 @@ make -j4
 
 chown -R c1tech:c1tech /home/c1tech/C1
 chown -R c1tech:c1tech /home/c1tech/C1-Control-Panel
+chmod +x /home/c1tech/C1/ExecStart.sh
 echo "-------------------------------------"
 echo "Done, Performing System Reboot"
 echo "-------------------------------------"
