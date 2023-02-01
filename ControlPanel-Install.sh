@@ -185,12 +185,16 @@ echo "-------------------------------------"
 echo "Installing Contold Panel Application"
 echo "-------------------------------------"
 url="https://github.com/Hamid-Najafi/C1-Control-Panel.git"
+
+folder="/home/c1tech/C1"
+[ -d "${folder}" ] && rm -rf "${folder}"
+
 folder="/home/c1tech/C1-Control-Panel"
 [ -d "${folder}" ] && rm -rf "${folder}"    
+
 git clone "${url}" "${folder}"
-folder="/home/c1tech/C1"
-[ -d "${folder}" ] && rm -rf "${folder}"    
 cd /home/c1tech/C1-Control-Panel/Panel
+# Build Qt App
 touch -r *.*
 qmake
 make -j4 
