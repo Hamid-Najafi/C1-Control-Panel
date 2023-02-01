@@ -125,7 +125,7 @@ sudo -H -u c1tech bash -c 'pip3 install sounddevice vosk shadowsocksr-cli'
 mkdir -p /home/c1tech/.cache/vosk
 chown -R c1tech:c1tech /home/c1tech
 # Manually Model Download (Because of Sanctions!)
-if [ ! -f /home/c1tech/.cache/vosk/vosk-model-small-fa-0.5.zip]
+if [ ! -f /home/c1tech/.cache/vosk/vosk-model-small-fa-0.5.zip ]
 then
   wget https://raw.githubusercontent.com/Hamid-Najafi/C1-Control-Panel/main/vosk-model-small-fa-0.5.zip -P /home/c1tech/.cache/vosk
   unzip /home/c1tech/.cache/vosk/vosk-model-small-fa-0.5.zip -d /home/c1tech/.cache/vosk
