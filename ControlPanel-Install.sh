@@ -219,7 +219,7 @@ cat > /home/c1tech/.config/systemd/user/orcp.service << "EOF"
 Description=C1Tech Operating Room Control Panel V2.0
 
 [Service]
-Environment="XDG_RUNTIME_DIR=/run/user/$UID"
+Environment="XDG_RUNTIME_DIR=/run/user/1000"
 Environment="DBUS_SESSION_BUS_ADDRESS=unix:path=$XDG_RUNTIME_DIR/bus"
 Environment="QT_QPA_PLATFORM=eglfs"
 Environment="QT_QPA_EGLFS_ALWAYS_SET_MODE=1"
