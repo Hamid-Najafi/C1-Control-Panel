@@ -108,7 +108,8 @@ apt install -q -y pulseaudio
 # fi
 
 # amixer -c 1 scontrols
-# amixer -c 1 sset 'Speaker' 68 && amixer -c 1 sset 'Mic' 68
+amixer -c 1 sset 'Speaker' 100 && amixer -c 1 sset 'Mic' 68
+amixer -c 2 sset 'Speaker' 100 && amixer -c 2 sset 'Mic' 68
 echo "-------------------------------------"
 echo "Configuring Vosk"
 echo "-------------------------------------"
@@ -153,6 +154,8 @@ echo "c1tech user added to dialout, audio, video & input groups"
 echo "-------------------------------------"
 echo "Installing PJSIP"
 echo "-------------------------------------"
+# Location of SIP Config file
+# /home/c1tech/.config/C1\ Tech/ORCO-8.conf
 url="https://github.com/pjsip/pjproject.git"
 folder="/home/c1tech/pjproject"
 [ -d "${folder}" ] && rm -rf "${folder}"    
@@ -197,6 +200,7 @@ folder="/home/c1tech/C1-Control-Panel"
 git clone "${url}" "${folder}"
 cd /home/c1tech/C1-Control-Panel/Panel
 # Build Qt App
+# make distclean
 touch -r *.*
 qmake
 make -j4 

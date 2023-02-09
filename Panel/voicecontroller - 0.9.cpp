@@ -146,7 +146,7 @@ void VoiceController::parseCommand(const VoiceData *data)
     }
     if (data->text.contains("سیمان"))
     {
-        if (data->result.length() == 1 && data->result[0].word == "سیمان" && data->result[0].conf > .8)
+        if (data->result.length() == 1 && data->result[0].word == "سیمان" && data->result[0].conf > .9)
         {
             // Wake up Word
             m_player->play();
@@ -165,23 +165,23 @@ void VoiceController::parseCommand(const VoiceData *data)
         {
             qDebug() << "Operating Light";
             // Operating Light
-            if (resultContainsWordWithConf(data, "چراغ", .8) && resultContainsWordWithConf(data, "روشن", .8))
+            if (resultContainsWordWithConf(data, "چراغ", .9) && resultContainsWordWithConf(data, "روشن", .9))
             {
                 qDebug() << "ON";
                 // ON
-                if (resultContainsWordWithConf(data, "یک", .8) && resultContainsWordWithConf(data, "دو", .8))
+                if (resultContainsWordWithConf(data, "یک", .9) && resultContainsWordWithConf(data, "دو", .9))
                 {
                     // LIGHT 1 && 2
                     emit newCommand(Commands::lightsOn);
                     qDebug() << "LIGHT 1 && 2";
                 }
-                else if (resultContainsWordWithConf(data, "یک", .8))
+                else if (resultContainsWordWithConf(data, "یک", .9))
                 {
                     // LIGHT 1
                     emit newCommand(Commands::light1On);
                     qDebug() << "LIGHT 1";
                 }
-                else if (resultContainsWordWithConf(data, "دو", .8))
+                else if (resultContainsWordWithConf(data, "دو", .9))
                 {
                     // LIGHT 2
                     emit newCommand(Commands::light2On);
@@ -194,23 +194,23 @@ void VoiceController::parseCommand(const VoiceData *data)
                     qDebug() << "both lights";
                 }
             }
-            if (resultContainsWordWithConf(data, "چراغ", .8) && resultContainsWordWithConf(data, "خاموش", .8))
+            if (resultContainsWordWithConf(data, "چراغ", .9) && resultContainsWordWithConf(data, "خاموش", .9))
             {
                 // OFF
                 qDebug() << "OFF";
-                if (resultContainsWordWithConf(data, "یک", .8) && resultContainsWordWithConf(data, "دو", .8))
+                if (resultContainsWordWithConf(data, "یک", .9) && resultContainsWordWithConf(data, "دو", .9))
                 {
                     // LIGHT 1 && 2
                     emit newCommand(Commands::lightsOff);
                     qDebug() << "LIGHT 1 && 2";
                 }
-                else if (resultContainsWordWithConf(data, "یک", .8))
+                else if (resultContainsWordWithConf(data, "یک", .9))
                 {
                     // LIGHT 1
                     emit newCommand(Commands::light1Off);
                     qDebug() << "LIGHT 1";
                 }
-                else if (resultContainsWordWithConf(data, "دو", .8))
+                else if (resultContainsWordWithConf(data, "دو", .9))
                 {
                     // LIGHT 2
                     emit newCommand(Commands::light2Off);
@@ -227,178 +227,178 @@ void VoiceController::parseCommand(const VoiceData *data)
         else
         {
             // Prismatic Ligth
-            if (resultContainsWordWithConf(data, "یک", .8) && resultContainsWordWithConf(data, "دو", .8))
+            if (resultContainsWordWithConf(data, "یک", .9) && resultContainsWordWithConf(data, "دو", .9))
             {
                 // Prismatic Lights 1 & 2
-                if (resultContainsWordWithConf(data, "ده", .8))
+                if (resultContainsWordWithConf(data, "ده", .9))
                 {
                     // 10%
                     emit newCommand(Commands::prismaticLights10);
                 }
-                else if (resultContainsWordWithConf(data, "بیست", .8))
+                else if (resultContainsWordWithConf(data, "بیست", .9))
                 {
                     // 20%
                     emit newCommand(Commands::prismaticLights20);
                 }
-                else if (resultContainsWordWithConf(data, "سی", .8))
+                else if (resultContainsWordWithConf(data, "سی", .9))
                 {
                     // 30%
                     emit newCommand(Commands::prismaticLights30);
                 }
-                else if (resultContainsWordWithConf(data, "چهل", .8))
+                else if (resultContainsWordWithConf(data, "چهل", .9))
                 {
                     // 40%
                     emit newCommand(Commands::prismaticLights40);
                 }
-                else if (resultContainsWordWithConf(data, "پنجاه", .8))
+                else if (resultContainsWordWithConf(data, "پنجاه", .9))
                 {
                     // 50%
                     emit newCommand(Commands::prismaticLights50);
                 }
-                else if (resultContainsWordWithConf(data, "شصت", .8))
+                else if (resultContainsWordWithConf(data, "شصت", .9))
                 {
                     // 60%
                     emit newCommand(Commands::prismaticLights60);
                 }
-                else if (resultContainsWordWithConf(data, "هفتاد", .8))
+                else if (resultContainsWordWithConf(data, "هفتاد", .9))
                 {
                     // 70%
                     emit newCommand(Commands::prismaticLights70);
                 }
-                else if (resultContainsWordWithConf(data, "هشتاد", .8))
+                else if (resultContainsWordWithConf(data, "هشتاد", .9))
                 {
                     // 80%
                     emit newCommand(Commands::prismaticLights80);
                 }
-                else if (resultContainsWordWithConf(data, "نود", .8))
+                else if (resultContainsWordWithConf(data, "نود", .9))
                 {
                     // 90%
                     emit newCommand(Commands::prismaticLights90);
                 }
-                else if (resultContainsWordWithConf(data, "صد", .8))
+                else if (resultContainsWordWithConf(data, "صد", .9))
                 {
                     // 100%
                     emit newCommand(Commands::prismaticLights100);
                 }
-                else if (resultContainsWordWithConf(data, "خاموش", .8))
+                else if (resultContainsWordWithConf(data, "خاموش", .9))
                 {
                     // OFF
                     emit newCommand(Commands::prismaticLightsOff);
                 }
             }
-            else if (resultContainsWordWithConf(data, "یک", .8))
+            else if (resultContainsWordWithConf(data, "یک", .9))
             {
                 // Light 1 ON
-                if (resultContainsWordWithConf(data, "ده", .8))
+                if (resultContainsWordWithConf(data, "ده", .9))
                 {
                     // 10%
                     emit newCommand(Commands::prismaticLight110);
                 }
-                else if (resultContainsWordWithConf(data, "بیست", .8))
+                else if (resultContainsWordWithConf(data, "بیست", .9))
                 {
                     // 20%
                     emit newCommand(Commands::prismaticLight120);
                 }
-                else if (resultContainsWordWithConf(data, "سی", .8))
+                else if (resultContainsWordWithConf(data, "سی", .9))
                 {
                     // 30%
                     emit newCommand(Commands::prismaticLight130);
                 }
-                else if (resultContainsWordWithConf(data, "چهل", .8))
+                else if (resultContainsWordWithConf(data, "چهل", .9))
                 {
                     // 40%
                     emit newCommand(Commands::prismaticLight140);
                 }
-                else if (resultContainsWordWithConf(data, "پنجاه", .8))
+                else if (resultContainsWordWithConf(data, "پنجاه", .9))
                 {
                     // 50%
                     emit newCommand(Commands::prismaticLight150);
                 }
-                else if (resultContainsWordWithConf(data, "شصت", .8))
+                else if (resultContainsWordWithConf(data, "شصت", .9))
                 {
                     // 60%
                     emit newCommand(Commands::prismaticLight160);
                 }
-                else if (resultContainsWordWithConf(data, "هفتاد", .8))
+                else if (resultContainsWordWithConf(data, "هفتاد", .9))
                 {
                     // 70%
                     emit newCommand(Commands::prismaticLight170);
                 }
-                else if (resultContainsWordWithConf(data, "هشتاد", .8))
+                else if (resultContainsWordWithConf(data, "هشتاد", .9))
                 {
                     // 80%
                     emit newCommand(Commands::prismaticLight180);
                 }
-                else if (resultContainsWordWithConf(data, "نود", .8))
+                else if (resultContainsWordWithConf(data, "نود", .9))
                 {
                     // 90%
                     emit newCommand(Commands::prismaticLight190);
                 }
-                else if (resultContainsWordWithConf(data, "صد", .8))
+                else if (resultContainsWordWithConf(data, "صد", .9))
                 {
                     // 100%
                     emit newCommand(Commands::prismaticLight1100);
                 }
-                else if (resultContainsWordWithConf(data, "خاموش", .8))
+                else if (resultContainsWordWithConf(data, "خاموش", .9))
                 {
                     // OFF
                     emit newCommand(Commands::prismaticLight1Off);
                 }
             }
-            else if (resultContainsWordWithConf(data, "دو", .8))
+            else if (resultContainsWordWithConf(data, "دو", .9))
             {
                 // Light 2 ON
-                if (resultContainsWordWithConf(data, "ده", .8))
+                if (resultContainsWordWithConf(data, "ده", .9))
                 {
                     // 10%
                     emit newCommand(Commands::prismaticLight210);
                 }
-                else if (resultContainsWordWithConf(data, "بیست", .8))
+                else if (resultContainsWordWithConf(data, "بیست", .9))
                 {
                     // 20%
                     emit newCommand(Commands::prismaticLight220);
                 }
-                else if (resultContainsWordWithConf(data, "سی", .8))
+                else if (resultContainsWordWithConf(data, "سی", .9))
                 {
                     // 30%
                     emit newCommand(Commands::prismaticLight230);
                 }
-                else if (resultContainsWordWithConf(data, "چهل", .8))
+                else if (resultContainsWordWithConf(data, "چهل", .9))
                 {
                     // 40%
                     emit newCommand(Commands::prismaticLight240);
                 }
-                else if (resultContainsWordWithConf(data, "پنجاه", .8))
+                else if (resultContainsWordWithConf(data, "پنجاه", .9))
                 {
                     // 50%
                     emit newCommand(Commands::prismaticLight250);
                 }
-                else if (resultContainsWordWithConf(data, "شصت", .8))
+                else if (resultContainsWordWithConf(data, "شصت", .9))
                 {
                     // 60%
                     emit newCommand(Commands::prismaticLight260);
                 }
-                else if (resultContainsWordWithConf(data, "هفتاد", .8))
+                else if (resultContainsWordWithConf(data, "هفتاد", .9))
                 {
                     // 70%
                     emit newCommand(Commands::prismaticLight270);
                 }
-                else if (resultContainsWordWithConf(data, "هشتاد", .8))
+                else if (resultContainsWordWithConf(data, "هشتاد", .9))
                 {
                     // 80%
                     emit newCommand(Commands::prismaticLight280);
                 }
-                else if (resultContainsWordWithConf(data, "نود", .8))
+                else if (resultContainsWordWithConf(data, "نود", .9))
                 {
                     // 90%
                     emit newCommand(Commands::prismaticLight290);
                 }
-                else if (resultContainsWordWithConf(data, "صد", .8))
+                else if (resultContainsWordWithConf(data, "صد", .9))
                 {
                     // 100%
                     emit newCommand(Commands::prismaticLight2100);
                 }
-                else if (resultContainsWordWithConf(data, "خاموش", .8))
+                else if (resultContainsWordWithConf(data, "خاموش", .9))
                 {
                     // OFF
                     emit newCommand(Commands::prismaticLight2Off);
@@ -407,62 +407,62 @@ void VoiceController::parseCommand(const VoiceData *data)
             else
             {
                 // Both Lights
-                if (resultContainsWordWithConf(data, "ده", .8))
+                if (resultContainsWordWithConf(data, "ده", .9))
                 {
                     // 10%
                     emit newCommand(Commands::prismaticLights10);
                 }
-                else if (resultContainsWordWithConf(data, "بیست", .8))
+                else if (resultContainsWordWithConf(data, "بیست", .9))
                 {
                     // 20%
                     emit newCommand(Commands::prismaticLights20);
                 }
-                else if (resultContainsWordWithConf(data, "سی", .8))
+                else if (resultContainsWordWithConf(data, "سی", .9))
                 {
                     // 30%
                     emit newCommand(Commands::prismaticLights30);
                 }
-                else if (resultContainsWordWithConf(data, "چهل", .8))
+                else if (resultContainsWordWithConf(data, "چهل", .9))
                 {
                     // 40%
                     emit newCommand(Commands::prismaticLights40);
                 }
-                else if (resultContainsWordWithConf(data, "پنجاه", .8))
+                else if (resultContainsWordWithConf(data, "پنجاه", .9))
                 {
                     // 50%
                     emit newCommand(Commands::prismaticLights50);
                 }
-                else if (resultContainsWordWithConf(data, "شصت", .8))
+                else if (resultContainsWordWithConf(data, "شصت", .9))
                 {
                     // 60%
                     emit newCommand(Commands::prismaticLights60);
                 }
-                else if (resultContainsWordWithConf(data, "هفتاد", .8))
+                else if (resultContainsWordWithConf(data, "هفتاد", .9))
                 {
                     // 70%
                     emit newCommand(Commands::prismaticLights70);
                 }
-                else if (resultContainsWordWithConf(data, "هشتاد", .8))
+                else if (resultContainsWordWithConf(data, "هشتاد", .9))
                 {
                     // 80%
                     emit newCommand(Commands::prismaticLights80);
                 }
-                else if (resultContainsWordWithConf(data, "نود", .8))
+                else if (resultContainsWordWithConf(data, "نود", .9))
                 {
                     // 90%
                     emit newCommand(Commands::prismaticLights90);
                 }
-                else if (resultContainsWordWithConf(data, "صد", .8))
+                else if (resultContainsWordWithConf(data, "صد", .9))
                 {
                     // 100%
                     emit newCommand(Commands::prismaticLights100);
                 }
-                else if (resultContainsWordWithConf(data, "خاموش", .8))
+                else if (resultContainsWordWithConf(data, "خاموش", .9))
                 {
                     // OFF
                     emit newCommand(Commands::prismaticLightsOff);
                 }
-                else if (resultContainsWordWithConf(data, "روشن", .8))
+                else if (resultContainsWordWithConf(data, "روشن", .9))
                 {
                     // ON
                     emit newCommand(Commands::prismaticLights100);
@@ -470,172 +470,172 @@ void VoiceController::parseCommand(const VoiceData *data)
             }
         }
     }
-    else if (resultContainsWordWithConf(data, "اتاق", .8))
+    else if (resultContainsWordWithConf(data, "اتاق", .9))
     {
         // Occupation
-        if (resultContainsWordWithConf(data, "آماده", .8))
+        if (resultContainsWordWithConf(data, "آماده", .9))
         {
             // Ready
             emit newCommand(Commands::occupationReady);
         }
-        else if (resultContainsWordWithConf(data, "مشغول", .8))
+        else if (resultContainsWordWithConf(data, "مشغول", .9))
         {
             // Occupied
             emit newCommand(Commands::occupationOccupied);
         }
-        else if (resultContainsWordWithConf(data, "درحال", .8) && resultContainsWordWithConf(data, "تمیزکاری", .8))
+        else if (resultContainsWordWithConf(data, "درحال", .9) && resultContainsWordWithConf(data, "تمیزکاری", .9))
         {
             // Cleaning
             emit newCommand(Commands::occupationCleaning);
         }
     }
-    else if (resultContainsWordWithConf(data, "یووی", .8))
+    else if (resultContainsWordWithConf(data, "یووی", .9))
     {
         // UV Light
-        if (resultContainsWordWithConf(data, "روشن", .8))
+        if (resultContainsWordWithConf(data, "روشن", .9))
         {
             // ON
             emit newCommand(Commands::uvLightOn);
         }
-        else if (resultContainsWordWithConf(data, "خاموش", .8))
+        else if (resultContainsWordWithConf(data, "خاموش", .9))
         {
             // OFF
             emit newCommand(Commands::uvLightOff);
         }
     }
-    else if (resultContainsWordWithConf(data, "نگار", .8) && resultContainsWordWithConf(data, "توسط", .8))
+    else if (resultContainsWordWithConf(data, "نگار", .9) && resultContainsWordWithConf(data, "توسط", .9))
     {
         // Negatoscope
-        if (resultContainsWordWithConf(data, "روشن", .8))
+        if (resultContainsWordWithConf(data, "روشن", .9))
         {
             // ON
             emit newCommand(Commands::negatoscopeOn);
         }
-        else if (resultContainsWordWithConf(data, "خاموش", .8))
+        else if (resultContainsWordWithConf(data, "خاموش", .9))
         {
             // OFF
             emit newCommand(Commands::negatoscopeOff);
         }
     }
-    else if (!resultContainsWordWithConf(data, "صفحه", .8) && resultContainsWordWithConf(data, "موزیک", .8))
+    else if (!resultContainsWordWithConf(data, "صفحه", .9) && resultContainsWordWithConf(data, "موزیک", .9))
     {
         // Music
-        if (resultContainsWordWithConf(data, "بخش", .8))
+        if (resultContainsWordWithConf(data, "بخش", .9))
         {
             // Play
             emit newCommand(Commands::musicPlay);
         }
-        else if (resultContainsWordWithConf(data, "قطع", .8))
+        else if (resultContainsWordWithConf(data, "قطع", .9))
         {
             // Stop
             emit newCommand(Commands::musicStop);
         }
-        else if (resultContainsWordWithConf(data, "بعدی", .8))
+        else if (resultContainsWordWithConf(data, "بعدی", .9))
         {
             // Next
             emit newCommand(Commands::musicNext);
         }
-        else if (resultContainsWordWithConf(data, "قبلی", .8))
+        else if (resultContainsWordWithConf(data, "قبلی", .9))
         {
             // Previous
             emit newCommand(Commands::musicPrevious);
         }
-        else if (resultContainsWordWithConf(data, "بی", .8) && resultContainsWordWithConf(data, "صدا", .8))
+        else if (resultContainsWordWithConf(data, "بی", .9) && resultContainsWordWithConf(data, "صدا", .9))
         {
             // Mute
             emit newCommand(Commands::musicMute);
         }
     }
-    else if (!resultContainsWordWithConf(data, "صفحه", .8) && resultContainsWordWithConf(data, "تایمر", .8))
+    else if (!resultContainsWordWithConf(data, "صفحه", .9) && resultContainsWordWithConf(data, "تایمر", .9))
     {
         // Timer
-        if (resultContainsWordWithConf(data, "یک", .8))
+        if (resultContainsWordWithConf(data, "یک", .9))
         {
             // Timer 1
-            if (resultContainsWordWithConf(data, "اجرا", .8))
+            if (resultContainsWordWithConf(data, "اجرا", .9))
             {
                 // Start Timer 1
                 emit newCommand(Commands::timer1Start);
             }
-            else if (resultContainsWordWithConf(data, "متوقف", .8))
+            else if (resultContainsWordWithConf(data, "متوقف", .9))
             {
                 // Stop Timer 1
                 emit newCommand(Commands::timer1Stop);
             }
-            else if (resultContainsWordWithConf(data, "ریست", .8))
+            else if (resultContainsWordWithConf(data, "ریست", .9))
             {
                 // Reset Timer 1
                 emit newCommand(Commands::timer1Reset);
             }
         }
-        else if (resultContainsWordWithConf(data, "دو", .8))
+        else if (resultContainsWordWithConf(data, "دو", .9))
         {
             // Timer 2
-            if (resultContainsWordWithConf(data, "اجرا", .8))
+            if (resultContainsWordWithConf(data, "اجرا", .9))
             {
                 // Start Timer 2
                 emit newCommand(Commands::timer2Start);
             }
-            else if (resultContainsWordWithConf(data, "متوقف", .8))
+            else if (resultContainsWordWithConf(data, "متوقف", .9))
             {
                 // Stop Timer 2
                 emit newCommand(Commands::timer2Stop);
             }
-            else if (resultContainsWordWithConf(data, "ریست", .8))
+            else if (resultContainsWordWithConf(data, "ریست", .9))
             {
                 // Reset Timer 2
                 emit newCommand(Commands::timer2Reset);
             }
         }
-        else if (resultContainsWordWithConf(data, "سه", .8))
+        else if (resultContainsWordWithConf(data, "سه", .9))
         {
             // Timer 3
-            if (resultContainsWordWithConf(data, "اجرا", .8))
+            if (resultContainsWordWithConf(data, "اجرا", .9))
             {
                 // Start Timer 3
                 emit newCommand(Commands::timer3Start);
             }
-            else if (resultContainsWordWithConf(data, "متوقف", .8))
+            else if (resultContainsWordWithConf(data, "متوقف", .9))
             {
                 // Stop Timer 3
                 emit newCommand(Commands::timer3Stop);
             }
-            else if (resultContainsWordWithConf(data, "ریست", .8))
+            else if (resultContainsWordWithConf(data, "ریست", .9))
             {
                 // Reset Timer 3
                 emit newCommand(Commands::timer3Reset);
             }
         }
     }
-    else if (resultContainsWordWithConf(data, "صفحه", .8))
+    else if (resultContainsWordWithConf(data, "صفحه", .9))
     {
         // Changing Pages
-        if (resultContainsWordWithConf(data, "روشنایی", .8))
+        if (resultContainsWordWithConf(data, "روشنایی", .9))
         {
             // Lighting page
             emit newCommand(Commands::lightingPage);
         }
-        else if (resultContainsWordWithConf(data, "تایمر", .8))
+        else if (resultContainsWordWithConf(data, "تایمر", .9))
         {
             // Timers page
             emit newCommand(Commands::timersPage);
         }
-        else if (resultContainsWordWithConf(data, "موزیک", .8))
+        else if (resultContainsWordWithConf(data, "موزیک", .9))
         {
             // Music page
             emit newCommand(Commands::musicPage);
         }
-        else if (resultContainsWordWithConf(data, "اینترنت", .8))
+        else if (resultContainsWordWithConf(data, "اینترنت", .9))
         {
             // Intercom page
             emit newCommand(Commands::intercomPage);
         }
-        else if (resultContainsWordWithConf(data, "لاگ", .8))
+        else if (resultContainsWordWithConf(data, "لاگ", .9))
         {
             // Logs page
             emit newCommand(Commands::logsPage);
         }
-        else if (resultContainsWordWithConf(data, "اطلاعات", .8))
+        else if (resultContainsWordWithConf(data, "اطلاعات", .9))
         {
             // About page
             emit newCommand(Commands::aboutPage);
