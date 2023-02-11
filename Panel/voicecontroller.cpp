@@ -146,7 +146,7 @@ void VoiceController::parseCommand(const VoiceData *data)
     }
     if (data->text.contains("سیمان"))
     {
-        if (data->result.length() == 1 && data->result[0].word == "سیمان" && data->result[0].conf > .7)
+        if (data->result.length() == 1 && data->result[0].word == "سیمان" && data->result[0].conf > .9)
         {
             // Wake up Word
             m_player->play();
