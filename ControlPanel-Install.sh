@@ -281,6 +281,7 @@ sudo apt install -q -y lame sox libsox-fmt-mp3
 
 arecord -v -f cd -t raw | lame -r - output.mp3
 play output.mp3
+play output.mp3 gain -15
 # -------==========-------
 wget https://raw.githubusercontent.com/alphacep/vosk-api/master/python/example/test_microphone.py
 python3 test_microphone.py -m fa
