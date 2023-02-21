@@ -8,7 +8,7 @@
 # Password: 1478963
 # -------==========-------
 # To Run This Script
-# wget https://raw.githubusercontent.com/Hamid-Najafi/C1-Control-Panel/main/ControlPanel-Update.sh && chmod +x ControlPanel-Update.sh && sudo ./ControlPanel-Update.sh
+# wget https://raw.githubusercontent.com/Hamid-Najafi/C1-Control-Panel/main/ControlPanel-Update.sh -O CP-Update.sh && chmod +x CP-Update.sh && sudo ./CP-Update.sh
 # OR
 # wget https://b2n.ir/e44282 -O CP-Update.sh && chmod +x CP-Update.sh && sudo ./CP-Update.sh
 # -------==========-------
@@ -26,16 +26,19 @@ folder="/home/c1tech/C1-Control-Panel"
 git clone "${url}" "${folder}"
 cd /home/c1tech/C1-Control-Panel/Panel
 # Build Qt App
+# make distclean
 touch -r *.*
 qmake
 make -j4 
+mv panel /home/c1tech/C1/
 
-mv /home/c1tech/C1-Control-Panel/C1 /home/c1tech/
+cp -r /home/c1tech/C1-Control-Panel/C1 /home/c1tech/
 chown -R c1tech:c1tech /home/c1tech/C1
 chown -R c1tech:c1tech /home/c1tech/C1-Control-Panel
 chmod +x /home/c1tech/C1/ExecStart.sh
 echo "-------------------------------------"
 echo "Done, Performing System Reboot"
 echo "-------------------------------------"
+rm /home/c1tech/CP-Update.sh
 runuser -l c1tech -c 'export XDG_RUNTIME_DIR=/run/user/$UID && export DBUS_SESSION_BUS_ADDRESS=unix:path=$XDG_RUNTIME_DIR/bus && systemctl --user restart orcp'
 # init 6

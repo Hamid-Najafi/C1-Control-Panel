@@ -8,7 +8,7 @@
 # Password: 1478963
 # -------==========-------
 # To Run This Script
-# wget https://raw.githubusercontent.com/Hamid-Najafi/C1-Control-Panel/main/ControlPanel-Install.sh && chmod +x ControlPanel-Install.sh && sudo ./ControlPanel-Install.sh
+# wget https://raw.githubusercontent.com/Hamid-Najafi/C1-Control-Panel/main/ControlPanel-Install.sh -O CP-Install.sh && chmod +x CP-Install.sh && sudo ./CP-Install.sh
 # OR
 # wget https://b2n.ir/g03701 -O CP-Install.sh && chmod +x CP-Install.sh && sudo ./CP-Install.sh
 # -------==========-------
@@ -73,19 +73,6 @@ apt install -q -y pulseaudio
 # defaults.pcm.card 3
 # defaults.ctl.card 3
 # EOF
-
-
-# This is for MINIPCs
-# string="options snd-hda-intel id=PCH,HDMI index=1,0"
-# file="/etc/modprobe.d/alsa-base.conf"
-# if ! grep -q "$string" "$file"; then
-#   echo "Setting ALSA Device Priority"
-#   echo "$string" | tee -a "$file"
-# fi
-
-# amixer -c 1 scontrols
-# amixer -c 1 sset 'Speaker' 100 && amixer -c 1 sset 'Mic' 68
-# amixer -c 2 sset 'Speaker' 100 && amixer -c 2 sset 'Mic' 68
 echo "-------------------------------------"
 echo "Configuring User Groups"
 echo "-------------------------------------"
@@ -112,7 +99,6 @@ make install
 ldconfig
 # Verify that pjproject has been installed in the target location
 ldconfig -p | grep pj
-cd /home/c1tech/
 # IF COMPILING ON ARM64:
 # sudo nano /usr/include/pj/config.h
 #   define PJ_IS_LITTLE_ENDIAN  1
@@ -147,6 +133,7 @@ cd /home/c1tech/C1-Control-Panel/Panel
 touch -r *.*
 qmake
 make -j4 
+mv panel /home/c1tech/C1/
 
 cp -r /home/c1tech/C1-Control-Panel/C1 /home/c1tech/
 chown -R c1tech:c1tech /home/c1tech/C1
@@ -247,6 +234,8 @@ echo "-------------------------------------"
 apt autoremove -y -q
 chown root:c1tech /bin/systemctl
 chmod 4755 /bin/systemctl
+cd /home/c1tech/
+rm -rf C1-Control-Panel pjproject usbmount* CP-Install.sh
 init 6
 echo "-------------------------------------"
 echo "Test Mic and Spk"
