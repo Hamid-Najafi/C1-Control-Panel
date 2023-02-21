@@ -39,6 +39,6 @@ chmod +x /home/c1tech/C1/ExecStart.sh
 echo "-------------------------------------"
 echo "Done, Performing System Reboot"
 echo "-------------------------------------"
-rm /home/c1tech/CP-Update.sh
-runuser -l c1tech -c 'export XDG_RUNTIME_DIR=/run/user/$UID && export DBUS_SESSION_BUS_ADDRESS=unix:path=$XDG_RUNTIME_DIR/bus && systemctl --user restart orcp'
-# init 6
+cd /home/c1tech/
+rm -rf C1-Control-Panel CP-Update.sh
+init 6
