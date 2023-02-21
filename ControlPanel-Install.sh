@@ -6,6 +6,10 @@
 # Hostname: orcp6-5
 # Username: c1tech
 # Password: 1478963
+# CPU: 4Core
+# Memory: 8GB
+# Disk (With OS): 16GB 
+# Script Total Download: 1GB
 # -------==========-------
 # To Run This Script
 # wget https://raw.githubusercontent.com/Hamid-Najafi/C1-Control-Panel/main/ControlPanel-Install.sh -O CP-Install.sh && chmod +x CP-Install.sh && sudo ./CP-Install.sh
