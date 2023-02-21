@@ -87,39 +87,6 @@ apt install -q -y pulseaudio
 # amixer -c 1 sset 'Speaker' 100 && amixer -c 1 sset 'Mic' 68
 # amixer -c 2 sset 'Speaker' 100 && amixer -c 2 sset 'Mic' 68
 echo "-------------------------------------"
-echo "Configuring Vosk"
-echo "-------------------------------------"
-if [ ! -d /home/c1tech/.pip ]
-then
-mkdir /home/c1tech/.pip
-chown c1tech:c1tech /home/c1tech/.pip
-cat >> /home/c1tech/.pip/pip.conf << EOF
-[global]
-index-url = https://pypi.iranrepo.ir/simple
-EOF
-fi
-
-sudo -H -u c1tech bash -c 'pip3 install sounddevice vosk shadowsocksr-cli'
-
-mkdir -p /home/c1tech/.cache/vosk
-chown -R c1tech:c1tech /home/c1tech
-# Manually Model Download (Because of Sanctions!)
-if [ ! -f /home/c1tech/.cache/vosk/vosk-model-small-fa-0.5.zip ]
-then
-  wget https://raw.githubusercontent.com/Hamid-Najafi/C1-Control-Panel/main/vosk-model-small-fa-0.5.zip -P /home/c1tech/.cache/vosk
-  unzip /home/c1tech/.cache/vosk/vosk-model-small-fa-0.5.zip -d /home/c1tech/.cache/vosk
-  rm /home/c1tech/.cache/vosk/vosk-model-small-fa-0.5.zip
-fi
-
-# Vosk Model Download
-# cat >> /home/c1tech/./DownloadVoskModel.py << EOF
-# from vosk import Model
-# model = Model(model_name="vosk-model-small-fa-0.5")
-# exit()
-# EOF
-# sudo -H -u c1tech bash -c 'python3 /home/c1tech/./DownloadVoskModel.py'
-# rm /home/c1tech/./DownloadVoskModel.py
-echo "-------------------------------------"
 echo "Configuring User Groups"
 echo "-------------------------------------"
 usermod -a -G dialout c1tech
@@ -181,7 +148,7 @@ touch -r *.*
 qmake
 make -j4 
 
-mv /home/c1tech/C1-Control-Panel/C1 /home/c1tech/
+cp -r /home/c1tech/C1-Control-Panel/C1 /home/c1tech/
 chown -R c1tech:c1tech /home/c1tech/C1
 chown -R c1tech:c1tech /home/c1tech/C1-Control-Panel
 chmod +x /home/c1tech/C1/ExecStart.sh
@@ -218,6 +185,39 @@ runuser -l c1tech -c 'export XDG_RUNTIME_DIR=/run/user/$UID && export DBUS_SESSI
 # systemctl --user status orcp
 # systemctl --user restart orcp
 # journalctl --user --unit orcp --follow
+echo "-------------------------------------"
+echo "Configuring Vosk"
+echo "-------------------------------------"
+if [ ! -d /home/c1tech/.pip ]
+then
+mkdir /home/c1tech/.pip
+chown c1tech:c1tech /home/c1tech/.pip
+cat >> /home/c1tech/.pip/pip.conf << EOF
+[global]
+index-url = https://pypi.iranrepo.ir/simple
+EOF
+fi
+
+sudo -H -u c1tech bash -c 'pip3 install sounddevice vosk shadowsocksr-cli'
+
+mkdir -p /home/c1tech/.cache/vosk
+chown -R c1tech:c1tech /home/c1tech
+# Manually Model Download (Because of Sanctions!)
+if [ ! -f /home/c1tech/.cache/vosk/vosk-model-small-fa-0.5.zip ]
+then
+  cp /home/c1tech/C1-Control-Panel/vosk-model-small-fa-0.5.zip /home/c1tech/.cache/vosk
+  unzip /home/c1tech/.cache/vosk/vosk-model-small-fa-0.5.zip -d /home/c1tech/.cache/vosk
+  rm /home/c1tech/.cache/vosk/vosk-model-small-fa-0.5.zip
+fi
+
+# Vosk Model Download
+# cat >> /home/c1tech/./DownloadVoskModel.py << EOF
+# from vosk import Model
+# model = Model(model_name="vosk-model-small-fa-0.5")
+# exit()
+# EOF
+# sudo -H -u c1tech bash -c 'python3 /home/c1tech/./DownloadVoskModel.py'
+# rm /home/c1tech/./DownloadVoskModel.py
 echo "-------------------------------------"
 echo "Configuring Splash Screen"
 echo "-------------------------------------"
