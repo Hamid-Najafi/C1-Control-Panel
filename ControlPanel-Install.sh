@@ -133,12 +133,12 @@ cd /home/c1tech/C1-Control-Panel/Panel
 touch -r *.*
 qmake
 make -j4 
-mv panel /home/c1tech/C1/
 
 cp -r /home/c1tech/C1-Control-Panel/C1 /home/c1tech/
+cp /home/c1tech/C1-Control-Panel/Panel/panel /home/c1tech/C1/
 chown -R c1tech:c1tech /home/c1tech/C1
-chown -R c1tech:c1tech /home/c1tech/C1-Control-Panel
 chmod +x /home/c1tech/C1/ExecStart.sh
+chmod +x /home/c1tech/C1/panel
 echo "-------------------------------------"
 echo "Creating Service for Contold Panel Application"
 echo "-------------------------------------"
