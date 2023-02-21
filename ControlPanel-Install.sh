@@ -37,41 +37,17 @@ locale-gen
 echo "-------------------------------------"
 echo "Installing Pre-Requirements"
 echo "-------------------------------------"
-# string="http://ir.archive.ubuntu.com/ubuntu"
-# file="/etc/apt/sources.list"
-# if grep -q "$string" "$file"; then
-#   echo "Replacing APT Sources File"
-#   mv /etc/apt/sources.list{,.backup}
-#   sh -c "echo 'deb [trusted=yes] https://debian.iranrepo.ir bullseye main' >> /etc/apt/sources.list"
-#   # sh -c "echo 'deb [trusted=yes] https://debian.iranrepo.ir jammy main' >> /etc/apt/sources.list"
-#   sudo apt-key adv --keyserver debian.iranrepo.ir --recv-keys  648ACFD622F3D138
-#   sudo apt-key adv --keyserver debian.iranrepo.ir --recv-keys  0E98404D386FA1D9
-#   sudo apt-key adv --keyserver debian.iranrepo.ir --recv-keys  605C66F00D6C9793
-#   # wget https://raw.githubusercontent.com/Hamid-Najafi/DevOps-Notebook/master/Apps/Apt/amd64-sources.list -O /etc/apt/sources.list
-#   # wget https://raw.githubusercontent.com/Hamid-Najafi/DevOps-Notebook/master/Apps/Apt/arm64-sources.list -O /etc/apt/sources.list
-# fi
-# string="http://archive.ubuntu.com/ubuntu"
-# if grep -q "$string" "$file"; then
-#   echo "Replacing APT Sources File"
-#   mv /etc/apt/sources.list{,.backup}
-#   sh -c "echo 'deb [trusted=yes] https://debian.iranrepo.ir bullseye main' >> /etc/apt/sources.list"
-#   # sh -c "echo 'deb [trusted=yes] https://debian.iranrepo.ir jammy main' >> /etc/apt/sources.list"
-#   # wget https://raw.githubusercontent.com/Hamid-Najafi/DevOps-Notebook/master/Apps/Apt/amd64-sources.list -O /etc/apt/sources.list
-#   # wget https://raw.githubusercontent.com/Hamid-Najafi/DevOps-Notebook/master/Apps/Apt/arm64-sources.list -O /etc/apt/sources.list
-# fi
-
 export DEBIAN_FRONTEND=noninteractive
 apt update && apt upgrade -q -y
-apt install -q -y software-properties-common git avahi-daemon python3-pip nano lame sox libsox-fmt-mp3 curl zip unzip atop bmon
-apt install -q -y debhelper build-essential gcc g++ gdb cmake
+# apt install -q -y git nano curl zip atop bmon vnstat
+apt install -q -y avahi-daemon python3-pip unzip lame sox libsox-fmt-mp3 
 echo "-------------------------------------"
 echo "Installing Qt & Tools"
 echo "-------------------------------------"
-apt install -q -y mesa-common-dev libfontconfig1 libxcb-xinerama0 libglu1-mesa-dev 
-apt install -q -y qt5* qttools5* qtmultimedia5* qtwebengine5* qtvirtualkeyboard* qtdeclarative* qt3d*
-apt install -q -y qtbase5* 
-apt install -q -y libqt5*
-apt install -q -y qml-module*
+apt install -q -y build-essential 
+apt install -q -y qt5-qmake qttools5* qtdeclarative5* qtmultimedia5* qtvirtualkeyboard5* 
+apt install -q -y libqt5serialport5* libqt5serialbus5* libqt5virtualkeyboard5*
+apt install -q -y qml-module-qtgraphicaleffects qml-module-qt-labs-settings
 echo "-------------------------------------"
 echo "Configuring Sound & Mic"
 echo "-------------------------------------"
@@ -108,8 +84,8 @@ apt install -q -y pulseaudio
 # fi
 
 # amixer -c 1 scontrols
-amixer -c 1 sset 'Speaker' 100 && amixer -c 1 sset 'Mic' 68
-amixer -c 2 sset 'Speaker' 100 && amixer -c 2 sset 'Mic' 68
+# amixer -c 1 sset 'Speaker' 100 && amixer -c 1 sset 'Mic' 68
+# amixer -c 2 sset 'Speaker' 100 && amixer -c 2 sset 'Mic' 68
 echo "-------------------------------------"
 echo "Configuring Vosk"
 echo "-------------------------------------"
@@ -177,7 +153,7 @@ cd /home/c1tech/
 echo "-------------------------------------"
 echo "Installing USB Auto Mount"
 echo "-------------------------------------"
-apt install -q -y liblockfile-bin liblockfile1 lockfile-progs
+apt install -q -y debhelper liblockfile-bin liblockfile1 lockfile-progs
 url="https://github.com/rbrito/usbmount"
 folder="/home/c1tech/usbmount"
 [ -d "${folder}" ] && rm -rf "${folder}"    
@@ -257,9 +233,7 @@ cp /usr/share/plymouth/themes/spinner/bgrt-fallback.png{,.bak}
 cp /usr/share/plymouth/themes/spinner/watermark.png{,.bak}
 cp /usr/share/plymouth/ubuntu-logo.png{,.bak}
 
-# This Comes abow Spinner
 cp /home/c1tech/C1-Control-Panel/bgrt-c1.png /usr/share/plymouth/ubuntu-logo.png
-# This Comes bellow Spinner
 cp /home/c1tech/C1-Control-Panel/bgrt-c1.png /usr/share/plymouth/themes/spinner/watermark.png
 
 update-initramfs -u
