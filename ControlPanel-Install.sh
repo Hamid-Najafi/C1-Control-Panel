@@ -111,22 +111,6 @@ ldconfig -p | grep pj
 #   define PJ_IS_LITTLE_ENDIAN  1
 #   define PJ_IS_BIG_ENDIAN     0
 echo "-------------------------------------"
-echo "Installing USB Auto Mount"
-echo "-------------------------------------"
-apt install -q -y debhelper liblockfile-bin liblockfile1 lockfile-progs
-
-# Compile From Source
-# url="https://github.com/rbrito/usbmount"
-# folder="/home/c1tech/usbmount"
-# [ -d "${folder}" ] && rm -rf "${folder}"    
-# git clone "${url}" "${folder}"
-# cd /home/c1tech/usbmount
-# dpkg-buildpackage -us -uc -b
-# cd /home/c1tech/
-
-# Install Compiled Version
-dpkg -i /home/c1tech/C1-Control-Panel/Tools/usbmount_0.0.24_all.deb
-echo "-------------------------------------"
 echo "Installing Contold Panel Application"
 echo "-------------------------------------"
 url="https://github.com/Hamid-Najafi/C1-Control-Panel.git"
@@ -183,6 +167,22 @@ runuser -l c1tech -c 'export XDG_RUNTIME_DIR=/run/user/$UID && export DBUS_SESSI
 # systemctl --user status orcp
 # systemctl --user restart orcp
 # journalctl --user --unit orcp --follow
+echo "-------------------------------------"
+echo "Installing USB Auto Mount"
+echo "-------------------------------------"
+apt install -q -y debhelper liblockfile-bin liblockfile1 lockfile-progs
+
+# Compile From Source
+# url="https://github.com/rbrito/usbmount"
+# folder="/home/c1tech/usbmount"
+# [ -d "${folder}" ] && rm -rf "${folder}"    
+# git clone "${url}" "${folder}"
+# cd /home/c1tech/usbmount
+# dpkg-buildpackage -us -uc -b
+# cd /home/c1tech/
+
+# Install Compiled Version
+dpkg -i /home/c1tech/C1-Control-Panel/Tools/usbmount_0.0.24_all.deb
 echo "-------------------------------------"
 echo "Configuring Vosk"
 echo "-------------------------------------"
