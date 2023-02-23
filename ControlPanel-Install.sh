@@ -24,6 +24,7 @@ echo "-------------------------------------"
 echo "-------------------------------------"
 echo "Setting Hostname"
 echo "-------------------------------------"
+
 echo "Set New Hostname: (ORCP-Floor-Room)"
 read hostname
 hostnamectl set-hostname $hostname
@@ -32,6 +33,10 @@ file="/etc/hosts"
 if ! grep -q "$string" "$file"; then
   printf "\n%s" "127.0.0.1 $hostname" >> "$file"
 fi
+echo "# Mask wait-online service"
+systemctl mask systemd-networkd-wait-online.service
+# sed -i '/dhcp4: true/i\      optional: true' /etc/netplan/00-installer-config.yaml
+# netplan apply
 echo "-------------------------------------"
 echo "Setting TimeZone & Locale"
 echo "-------------------------------------"
@@ -111,14 +116,18 @@ echo "-------------------------------------"
 echo "Installing USB Auto Mount"
 echo "-------------------------------------"
 apt install -q -y debhelper liblockfile-bin liblockfile1 lockfile-progs
-url="https://github.com/rbrito/usbmount"
-folder="/home/c1tech/usbmount"
-[ -d "${folder}" ] && rm -rf "${folder}"    
-git clone "${url}" "${folder}"
-cd /home/c1tech/usbmount
-dpkg-buildpackage -us -uc -b
-cd /home/c1tech/
-dpkg -i usbmount_0.0.24_all.deb
+
+# Compile From Source
+# url="https://github.com/rbrito/usbmount"
+# folder="/home/c1tech/usbmount"
+# [ -d "${folder}" ] && rm -rf "${folder}"    
+# git clone "${url}" "${folder}"
+# cd /home/c1tech/usbmount
+# dpkg-buildpackage -us -uc -b
+# cd /home/c1tech/
+
+# Install Compiled Version
+dpkg -i /home/c1tech/C1-Control-Panel/Tools/usbmount_0.0.24_all.deb
 echo "-------------------------------------"
 echo "Installing Contold Panel Application"
 echo "-------------------------------------"
@@ -131,12 +140,12 @@ folder="/home/c1tech/C1-Control-Panel"
 [ -d "${folder}" ] && rm -rf "${folder}"    
 
 git clone "${url}" "${folder}"
-cd /home/c1tech/C1-Control-Panel/Panel
+# cd /home/c1tech/C1-Control-Panel/Panel
 # Build Qt App
 # make distclean
-touch -r *.*
-qmake
-make -j4 
+# touch -r *.*
+# qmake
+# make -j4 
 
 cp -r /home/c1tech/C1-Control-Panel/C1 /home/c1tech/
 cp /home/c1tech/C1-Control-Panel/Panel/panel /home/c1tech/C1/
@@ -196,11 +205,10 @@ chown -R c1tech:c1tech /home/c1tech
 # Manually Model Download (Because of Sanctions!)
 if [ ! -f /home/c1tech/.cache/vosk/vosk-model-small-fa-0.5.zip ]
 then
-  cp /home/c1tech/C1-Control-Panel/vosk-model-small-fa-0.5.zip /home/c1tech/.cache/vosk
+  cp /home/c1tech/C1-Control-Panel/Tools/vosk-model-small-fa-0.5.zip /home/c1tech/.cache/vosk
   unzip /home/c1tech/.cache/vosk/vosk-model-small-fa-0.5.zip -d /home/c1tech/.cache/vosk
   rm /home/c1tech/.cache/vosk/vosk-model-small-fa-0.5.zip
 fi
-
 # Vosk Model Download
 # cat >> /home/c1tech/./DownloadVoskModel.py << EOF
 # from vosk import Model
@@ -224,8 +232,8 @@ cp /usr/share/plymouth/themes/spinner/bgrt-fallback.png{,.bak}
 cp /usr/share/plymouth/themes/spinner/watermark.png{,.bak}
 cp /usr/share/plymouth/ubuntu-logo.png{,.bak}
 
-cp /home/c1tech/C1-Control-Panel/bgrt-c1.png /usr/share/plymouth/ubuntu-logo.png
-cp /home/c1tech/C1-Control-Panel/bgrt-c1.png /usr/share/plymouth/themes/spinner/watermark.png
+cp /home/c1tech/C1-Control-Panel/SplashScreen/bgrt-c1.png /usr/share/plymouth/ubuntu-logo.png
+cp /home/c1tech/C1-Control-Panel/SplashScreen/bgrt-c1.png /usr/share/plymouth/themes/spinner/watermark.png
 
 update-initramfs -u
 # update-alternatives --list default.plymouth
