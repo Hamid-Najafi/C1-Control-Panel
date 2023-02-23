@@ -13,8 +13,6 @@
 # -------==========-------
 # To Run This Script
 # wget https://raw.githubusercontent.com/Hamid-Najafi/C1-Control-Panel/main/ControlPanel-Install.sh -O CP-Install.sh && chmod +x CP-Install.sh && sudo ./CP-Install.sh
-# OR
-# wget https://b2n.ir/g03701 -O CP-Install.sh && chmod +x CP-Install.sh && sudo ./CP-Install.sh
 # -------==========-------
 echo "-------------------------------------"
 echo "Create Account"
@@ -33,7 +31,7 @@ file="/etc/hosts"
 if ! grep -q "$string" "$file"; then
   printf "\n%s" "127.0.0.1 $hostname" >> "$file"
 fi
-echo "# Mask wait-online service"
+echo "Mask wait-online service"
 systemctl mask systemd-networkd-wait-online.service
 # sed -i '/dhcp4: true/i\      optional: true' /etc/netplan/00-installer-config.yaml
 # netplan apply
