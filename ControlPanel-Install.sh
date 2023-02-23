@@ -13,7 +13,6 @@
 # -------==========-------
 # To Run This Script
 # wget https://raw.githubusercontent.com/Hamid-Najafi/C1-Control-Panel/main/ControlPanel-Install.sh -O CP-Install.sh && chmod +x CP-Install.sh && sudo ./CP-Install.sh
-# -------==========-------
 echo "-------------------------------------"
 echo "Create Account"
 echo "-------------------------------------"
@@ -130,7 +129,6 @@ git clone "${url}" "${folder}"
 # make -j4 
 
 cp -r /home/c1tech/C1-Control-Panel/C1 /home/c1tech/
-cp /home/c1tech/C1-Control-Panel/Panel/panel /home/c1tech/C1/
 chown -R c1tech:c1tech /home/c1tech/C1
 chmod +x /home/c1tech/C1/ExecStart.sh
 chmod +x /home/c1tech/C1/panel
@@ -201,7 +199,7 @@ sudo -H -u c1tech bash -c 'pip3 install sounddevice vosk shadowsocksr-cli'
 mkdir -p /home/c1tech/.cache/vosk
 chown -R c1tech:c1tech /home/c1tech
 # Manually Model Download (Because of Sanctions!)
-if [ ! -f /home/c1tech/.cache/vosk/vosk-model-small-fa-0.5.zip ]
+if [ ! -d /home/c1tech/.cache/vosk/vosk-model-small-fa-0.5 ]
 then
   cp /home/c1tech/C1-Control-Panel/Tools/vosk-model-small-fa-0.5.zip /home/c1tech/.cache/vosk
   unzip /home/c1tech/.cache/vosk/vosk-model-small-fa-0.5.zip -d /home/c1tech/.cache/vosk
